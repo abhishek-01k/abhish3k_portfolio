@@ -1,0 +1,50 @@
+export const SKILLS = [
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Node.js",
+    "Python",
+    "Solidity",
+    "Ethereum",
+    "Web3.js",
+    "Hardhat",
+    "IPFS",
+    "Docker",
+    "Kubernetes",
+    "GraphQL",
+    "Tailwind",
+    "AWS",
+    "PostgreSQL",
+    "MongoDB",
+    "Redis",
+    "LangChain",
+    "OpenAI API",
+    "FastAPI",
+    "Go",
+    "Rust",
+    "Vercel",
+    "TensorFlow",
+]
+
+export const AREAS = [
+    {
+      label: "Blockchain",
+      heading: "On-chain protocol engineering.",
+      body: "Cross-chain DEX, Universal Account Abstraction, $16M+ TVL yield farming. 7+ production dApps at Push Protocol serving thousands of users daily.",
+    },
+    {
+      label: "AI Engineering",
+      heading: "AI systems that actually ship.",
+      body: "RAG pipelines, LLM toolchains, adaptive learning platforms. Cut media production costs by 90% with automated prompt-to-video generation.",
+    },
+    {
+      label: "Content Creator",
+      heading: "Making the complex simple.",
+      body: "Technical walkthroughs and architecture deep-dives that turn hard concepts in DeFi, AI, and distributed systems into clear narratives.",
+    },
+    {
+      label: "Founder",
+      heading: "Backed and building.",
+      body: "Founded Omnitutor (Tavastra VC · Google for Startups). 2,500+ users onboarded in 24 h. 10+ global hackathon wins across ETHGlobal, Encode, and BNB.",
+    },
+  ]
