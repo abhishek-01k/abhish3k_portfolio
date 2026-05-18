@@ -3,7 +3,9 @@ import { AboutSection } from './components/about-section'
 
 const AboutPage = () => {
   return (
-    <AboutSection />
+    <div className='bg-[#0e0e0e]'>
+      <AboutSection />
+    </div>
   )
 }
 

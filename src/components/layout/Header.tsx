@@ -10,9 +10,9 @@ import { GlitchButton } from "@/src/components/ui/glitch-button"
 import { cn } from "@/src/lib/utils"
 
 const navLinks = [
-  { label: "Home",  href: "#" },
+  { label: "About",  href: "#about" },
   { label: "Work",  href: "#work" },
-  { label: "About", href: "#about" },
+  { label: "Projects", href: "#projects" },
 ]
 
 const HEADER_H = "top-16 sm:top-20"
