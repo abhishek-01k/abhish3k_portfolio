@@ -1,8 +1,9 @@
 "use client"
 
-import { Menu, X } from "lucide-react"
+import { ArrowUp, Menu, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
 import { Button } from "@/src/components/ui/button"
@@ -19,17 +20,54 @@ const HEADER_H = "top-16 sm:top-20"
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const [hasLeftHero, setHasLeftHero] = useState(false)
+  const pathname = usePathname()
+  const isHomePage = pathname === "/"
+
+  useEffect(() => {
+    if (!isHomePage) {
+      return
+    }
+
+    const onScroll = () => {
+      const hero = document.querySelector<HTMLElement>("[data-home-hero]")
+      const heroBottom = hero?.offsetTop ? hero.offsetTop + hero.offsetHeight : hero?.offsetHeight ?? 0
+      setHasLeftHero(window.scrollY > Math.max(heroBottom - 120, 0))
+    }
+
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    window.addEventListener("resize", onScroll)
+
+    return () => {
+      window.removeEventListener("scroll", onScroll)
+      window.removeEventListener("resize", onScroll)
+    }
+  }, [isHomePage])
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : ""
     return () => { document.body.style.overflow = "" }
   }, [isOpen])
 
+  const shouldHideHeader = isHomePage && hasLeftHero && !isOpen
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
   const close = () => setIsOpen(false)
 
   return (
     <>
-      <header className="sticky top-0 z-50 flex h-16 w-full items-center justify-between bg-background/80 px-4 backdrop-blur sm:h-20 sm:px-6 lg:px-8">
+      <header
+        className={cn(
+          "sticky top-0 z-50 flex h-16 w-full items-center justify-between bg-background/80 px-4 backdrop-blur transition-all duration-700 ease-in-out sm:h-20 sm:px-6 lg:px-8",
+          shouldHideHeader
+            ? "pointer-events-none -translate-y-full opacity-0"
+            : "translate-y-0 opacity-100",
+        )}
+      >
 
         <Link href="/" aria-label="Go to home" className="flex items-center gap-2">
           <Image
@@ -114,6 +152,20 @@ const Header = () => {
           </div>
         </nav>
       </div>
+
+      <button
+        type="button"
+        aria-label="Scroll to top"
+        onClick={scrollToTop}
+        className={cn(
+          "fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full border border-border bg-background/85 text-foreground shadow-lg backdrop-blur transition-all duration-700 ease-in-out hover:-translate-y-1 hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:bottom-8 sm:right-8 sm:h-14 sm:w-14",
+          isHomePage && hasLeftHero
+            ? "translate-y-0 opacity-100"
+            : "pointer-events-none translate-y-5 opacity-0",
+        )}
+      >
+        <ArrowUp className="h-5 w-5" />
+      </button>
     </>
   )
 }

@@ -16,7 +16,11 @@ const stats = [
 const HomePage = () => {
   return (
     <main>
-      <section className="grid min-h-[calc(100svh-4rem)] grid-cols-1 border-t sm:min-h-[calc(100svh-5rem)] lg:grid-cols-2">
+      <section
+        id="home"
+        data-home-hero
+        className="grid min-h-[calc(100svh-4rem)] grid-cols-1 border-t sm:min-h-[calc(100svh-5rem)] lg:grid-cols-2"
+      >
 
         {/* ── Left column ───────────────────────────────────── */}
         <div className="flex flex-col border-b lg:border-b-0 lg:border-r">

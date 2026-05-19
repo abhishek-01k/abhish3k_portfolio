@@ -3,7 +3,7 @@
 import { AREAS } from "@/src/config/constants"
 import { EyeTracker } from "@/src/modules/home/components/eye-tracker"
 
-const QUOTE = "You build the future.\nAnd everything you ship\nis watching."
+const QUOTE = "The price of privacy is eternal vigilance - AI just raised the price."
 
 const borders = [
   "",
@@ -22,16 +22,28 @@ export const AboutSection = () => {
           </span>
         </div>
 
-        <h2
-          className="px-8 pt-2 pb-6 leading-[1.06] font-bold tracking-tight text-white"
-          style={{ fontSize: "clamp(2.8rem, 5vw, 5.5rem)" }}
-        >
-          {QUOTE.split("\n").map((line, i) => (
-            <span key={i} className="block">
-              {line}
-            </span>
-          ))}
-        </h2>
+        <blockquote className="relative mx-8 mt-4 mb-8 border-y border-neutral-800 px-4 py-8 text-center">
+          <h2
+            className="mx-auto max-w-3xl leading-[1.12] font-bold tracking-tight text-white"
+            style={{ fontSize: "clamp(1.5rem, 2.8vw, 3rem)" }}
+          >
+            {QUOTE.split("\n").map((line, i) => (
+              <span key={i} className="block">
+                {i === 0 && (
+                  <span className="mr-1 align-baseline text-[#e64a3b]">
+                    &ldquo;
+                  </span>
+                )}
+                {line}
+                {i === QUOTE.split("\n").length - 1 && (
+                  <span className="ml-1 align-baseline text-[#e64a3b]">
+                    &rdquo;
+                  </span>
+                )}
+              </span>
+            ))}
+          </h2>
+        </blockquote>
 
         <div className="flex border-t border-neutral-800">
           <div className="hidden w-[38%] shrink-0 flex-col items-center justify-center border-r border-neutral-800 px-10 py-6 lg:flex">
