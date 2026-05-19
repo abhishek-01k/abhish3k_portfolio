@@ -107,6 +107,59 @@
   to   { transform: translateX(-50%); }
 }
 
+/* ── Light footer protocol animation ───────────────────────── */
+@keyframes footer-ascii-drift {
+  0%   { transform: translate3d(-4%, -1%, 0) scale(1.02) rotate(-0.6deg); }
+  20%  { transform: translate3d(2.5%, -5.5%, 0) scale(1.07) rotate(0.4deg); }
+  40%  { transform: translate3d(-2.5%, -3%, 0) scale(1.05) rotate(-0.3deg); }
+  60%  { transform: translate3d(4%, -6.5%, 0) scale(1.08) rotate(0.6deg); }
+  80%  { transform: translate3d(-1%, -2%, 0) scale(1.04) rotate(-0.4deg); }
+  100% { transform: translate3d(-4%, -1%, 0) scale(1.02) rotate(-0.6deg); }
+}
+
+@keyframes footer-ascii-glow {
+  0%   { opacity: 0.55; transform: scale(0.88) translate(-6%, -4%); }
+  30%  { opacity: 1;    transform: scale(1.25) translate(5%, 2%); }
+  60%  { opacity: 0.75; transform: scale(1.15) translate(-3%, 6%); }
+  100% { opacity: 0.55; transform: scale(0.88) translate(-6%, -4%); }
+}
+
+@keyframes footer-word-pulse {
+  0%, 100% {
+    opacity: 0.78;
+    filter: blur(0) brightness(1);
+    transform: translateY(0) scale(1);
+  }
+  30% {
+    opacity: 0.96;
+    filter: blur(0) brightness(1.08);
+    transform: translateY(-7px) scale(1.015);
+  }
+  65% {
+    opacity: 1;
+    filter: blur(1px) brightness(1.14);
+    transform: translateY(-5px) scale(1.025);
+  }
+}
+
+.footer-ascii-drift {
+  animation: footer-ascii-drift 7s ease-in-out infinite;
+}
+
+/* second layer: reverse + slower = parallax depth */
+.footer-ascii-drift-slow {
+  animation: footer-ascii-drift 11s ease-in-out infinite reverse;
+  animation-delay: -3s;
+}
+
+.footer-ascii-glow {
+  animation: footer-ascii-glow 4.5s ease-in-out infinite;
+}
+
+.footer-word-pulse {
+  animation: footer-word-pulse 2.8s ease-in-out infinite;
+}
+
 /* ── Glitch button ─────────────────────────────────────────── */
 @keyframes glitch-jitter {
   0%,100% { transform: translate(0,0); }

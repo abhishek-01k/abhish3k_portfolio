@@ -36,7 +36,6 @@ export const ExperienceSection = () => {
   const sectionRef = useRef<HTMLElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
-  const [scrollProgress, setScrollProgress] = useState(0)
   const [pinScrollDistance, setPinScrollDistance] = useState(1600)
 
   const activeItem = TIMELINE[activeIndex]
@@ -49,7 +48,6 @@ export const ExperienceSection = () => {
       Math.round(progress * (TIMELINE.length - 1))
     )
 
-    setScrollProgress(progress)
     setActiveIndex(nextIndex)
   }
 
@@ -224,62 +222,7 @@ export const ExperienceSection = () => {
             </div>
           </aside>
 
-          <div className="grid min-h-0 grid-cols-[2rem_minmax(0,1fr)] gap-5 lg:h-[calc(100vh-4rem)]">
-            {/* ── Custom scroll rail ───────────────────────────────── */}
-            <div className="relative hidden sm:block">
-              <div className="absolute inset-y-4 left-1/2 w-px -translate-x-1/2 overflow-hidden rounded-full bg-white/8">
-                <div
-                  className="h-full w-full origin-top rounded-full bg-linear-to-b from-[#e64a3b] to-[#e64a3b]/25"
-                  style={{ transform: `scaleY(${scrollProgress})` }}
-                />
-              </div>
-
-              {TIMELINE.map((item, index) => {
-                const isPast = index < activeIndex
-                const isActive = index === activeIndex
-                const itemProgress = index / (TIMELINE.length - 1)
-                const markerTop = `calc(1rem + ${itemProgress} * (100% - 2rem))`
-
-                return (
-                  <button
-                    key={`${item.company}-${item.year}-nav`}
-                    type="button"
-                    onClick={() => {
-                      const section = sectionRef.current
-                      const container = scrollRef.current
-                      if (!section || !container) return
-                      window.scrollTo({
-                        top:
-                          section.offsetTop +
-                          (index / (TIMELINE.length - 1)) * pinScrollDistance,
-                        behavior: "smooth",
-                      })
-                    }}
-                    className="group absolute left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 focus:outline-none"
-                    style={{ top: markerTop }}
-                    aria-label={`Scroll to ${item.company} ${item.year}`}
-                  >
-                    {isActive ? (
-                      <span className="relative flex items-center justify-center">
-                        <span className="absolute h-5 w-5 animate-ping rounded-full bg-[#e64a3b]/20" />
-                        <span className="absolute h-[14px] w-[14px] rounded-full ring-1 ring-[#e64a3b]/50" />
-                        <span className="relative h-2.5 w-2.5 rounded-full bg-[#e64a3b] shadow-[0_0_10px_3px_rgba(230,74,59,0.6)]" />
-                      </span>
-                    ) : (
-                      <span
-                        className={`block rounded-full transition-all duration-300 group-hover:scale-[1.8] ${
-                          isPast
-                            ? "h-1.5 w-1.5 bg-[#e64a3b]/45"
-                            : "h-1.5 w-1.5 bg-neutral-700 group-hover:bg-neutral-500"
-                        }`}
-                      />
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* ── Scrollable cards (no native scrollbar) ───────────── */}
+          <div className="min-h-0 lg:h-[calc(100vh-4rem)]">
             <div
               ref={scrollRef}
               onScroll={handleScroll}

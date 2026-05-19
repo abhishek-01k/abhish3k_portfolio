@@ -1,7 +1,7 @@
 import { RecommendationsSection } from "./components/recommendations-section"
 
 const RecommendationsPage = () => (
-  <div className="bg-[#0e0e0e]">
+  <div className="bg-[#f7f4ee]">
     <RecommendationsSection />
   </div>
 )

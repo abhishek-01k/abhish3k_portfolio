@@ -7,19 +7,21 @@ import { useMemo, useState } from "react"
 import { PROJECTS } from "@/src/config/constants"
 
 const ROWS = [1, 2, 3, 4]
+const ROW_STARTS = ROWS.map((_, index) =>
+  ROWS.slice(0, index).reduce((total, size) => total + size, 0)
+)
 
 export const ProjectsSection = () => {
   const [cursor, setCursor] = useState({ active: false, x: 0, y: 0 })
 
-  const rows = useMemo(() => {
-    let start = 0
-
-    return ROWS.map((size) => {
-      const row = PROJECTS.slice(start, start + size)
-      start += size
-      return row
-    }).filter((row) => row.length > 0)
-  }, [])
+  const rows = useMemo(
+    () =>
+      ROWS.map((size, index) => {
+        const start = ROW_STARTS[index]
+        return PROJECTS.slice(start, start + size)
+      }).filter((row) => row.length > 0),
+    []
+  )
 
   return (
     <section
@@ -84,7 +86,6 @@ export const ProjectsSection = () => {
 interface Project {
   title: string
   description: string
-  tags: string[]
   github: string
   live: string | null
   year: string
@@ -134,7 +135,7 @@ const ProjectTile = ({
         <span className="mb-3 block font-mono text-[10px] uppercase tracking-[0.28em] text-white/45 transition-colors duration-300 group-hover:text-[#e64a3b]">
           {project.year}
         </span>
-        <h3 className="max-w-[11ch] text-3xl font-bold leading-[0.9] tracking-[-0.06em] text-white transition-colors duration-300 group-hover:text-[#e64a3b] sm:text-4xl lg:text-5xl">
+        <h3 className="max-w-[11ch] text-xl font-bold leading-[0.9] tracking-[-0.06em] text-white transition-colors duration-300 group-hover:text-[#e64a3b] sm:text-3xl lg:text-4xl">
           {project.title}
         </h3>
         <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/58 transition duration-300 group-hover:translate-y-0 group-hover:text-white md:translate-y-2 md:opacity-0 md:group-hover:opacity-100">
