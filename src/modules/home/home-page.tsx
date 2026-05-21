@@ -8,7 +8,7 @@ import { StatCounter } from "./components/stat-counter"
 const roles = ["Software Developer", "AI Engineer", "Blockchain Developer"]
 
 const stats = [
-  { value: 16, prefix: "$", suffix: "M+", label: "TVL Handled",   dark: false },
+  { value: 4, prefix: "", suffix: "+", label: "Years of Experience",   dark: false },
   { value: 15, prefix: "",  suffix: "+",  label: "Products Built", dark: false },
   { value: 10, prefix: "",  suffix: "+",  label: "Hackathon Wins", dark: true  },
 ]

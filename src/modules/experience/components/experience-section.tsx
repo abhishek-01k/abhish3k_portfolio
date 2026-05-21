@@ -228,7 +228,7 @@ export const ExperienceSection = () => {
               onScroll={handleScroll}
               className="min-h-[70vh] scrollbar-none overflow-y-auto lg:h-full lg:min-h-0 [&::-webkit-scrollbar]:hidden"
             >
-              <div className="space-y-5 pb-8 sm:space-y-7">
+              <div className="space-y-5 pt-4 pb-8 sm:space-y-7 sm:pt-5 lg:pt-6 lg:pb-10">
                 {TIMELINE.map((item, index) => (
                   <ExperienceTimelineCard
                     key={`${item.company}-${item.role}-${item.year}`}
@@ -254,6 +254,43 @@ const Stat = ({ value, label }: { value: string; label: string }) => (
     </p>
   </div>
 )
+
+const HIGHLIGHTED_PHRASES = [
+  "Ramenfi",
+  "Oakline",
+  "Push Wallet",
+  "Base Fellowship Program",
+  "Create Channel Flow",
+  "6 global hackathons",
+  "Yield Farming",
+  "MetaMask Push Snap",
+  "Push Chat",
+  "10 week sprint",
+  "frontend architecture",
+  "blockchain payment system",
+  "WebSockets",
+]
+
+const renderHighlightedText = (text: string) => {
+  const phrase = HIGHLIGHTED_PHRASES.find((highlight) =>
+    text.toLowerCase().includes(highlight.toLowerCase())
+  )
+
+  if (!phrase) return text
+
+  const start = text.toLowerCase().indexOf(phrase.toLowerCase())
+  const end = start + phrase.length
+
+  return (
+    <>
+      {text.slice(0, start)}
+      <mark className="rounded-md bg-[#e64a3b]/12 px-1.5 py-0.5 font-semibold text-[#ff7a68]">
+        {text.slice(start, end)}
+      </mark>
+      {text.slice(end)}
+    </>
+  )
+}
 
 const ExperienceTimelineCard = ({
   item,
@@ -298,8 +335,8 @@ const ExperienceTimelineCard = ({
                 {item.period}
               </span>
             </div>
-            <p className="max-w-md text-sm leading-7 text-neutral-400">
-              {item.role} impact highlights
+            <p className="max-w-md text-base leading-7 font-semibold text-neutral-300">
+              {item.role}
             </p>
           </div>
 
@@ -317,7 +354,7 @@ const ExperienceTimelineCard = ({
               className="flex gap-3 text-sm leading-7 text-neutral-300"
             >
               <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-[#e64a3b]" />
-              <span>{bullet}</span>
+              <span>{renderHighlightedText(bullet)}</span>
             </li>
           ))}
         </ul>

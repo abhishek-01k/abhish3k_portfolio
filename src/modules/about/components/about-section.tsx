@@ -51,16 +51,15 @@ export const AboutSection = () => {
           </div>
 
           <div className="grid flex-1 grid-cols-2">
-            {AREAS.map(({ label, heading, body }, i) => (
+            {AREAS.map(({ heading, body }, i) => (
               <div
-                key={label}
+                key={heading}
                 className={`flex flex-col gap-5 px-8 py-10 lg:px-10 xl:px-12 ${borders[i]}`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-bold tracking-[0.28em] text-[#e64a3b] uppercase">
-                    {label}
+                <div className="flex justify-end">
+                  <span className="text-xs font-bold tracking-[0.28em] text-[#e64a3b]">
+                    {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-xs text-neutral-700">—</span>
                 </div>
 
                 <h3 className="text-lg leading-snug font-bold text-white lg:text-xl">

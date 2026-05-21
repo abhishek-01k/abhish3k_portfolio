@@ -2,16 +2,20 @@
 
 import { useState } from "react"
 
+const CONTACT_EMAIL = "abhishekkumar214567@gmail.com"
+
 export const ContactSection = () => {
-  const [sent,    setSent]    = useState(false)
-  const [loading, setLoading] = useState(false)
   const [form,    setForm]    = useState({ name: "", email: "", message: "" })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    // Placeholder — wire up your preferred email service here
-    setTimeout(() => { setSent(true); setLoading(false) }, 800)
+
+    const subject = encodeURIComponent(`Portfolio inquiry from ${form.name}`)
+    const body = encodeURIComponent(
+      `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
+    )
+
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`
   }
 
   return (
@@ -31,7 +35,14 @@ export const ContactSection = () => {
           </h2>
           <p className="mt-3 text-neutral-500 text-sm max-w-md leading-relaxed">
             Open to protocol engineering roles, founding-engineer opportunities, and
-            interesting side projects. Drop a message or reach out directly.
+            interesting side projects. Drop a message or reach out directly at{" "}
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="text-[#e64a3b] underline-offset-4 transition-colors hover:text-white hover:underline"
+            >
+              {CONTACT_EMAIL}
+            </a>
+            .
           </p>
         </div>
 
@@ -40,51 +51,43 @@ export const ContactSection = () => {
 
           {/* Form */}
           <div className="border-b lg:border-b-0 lg:border-r border-neutral-800 px-8 py-8">
-            {sent ? (
-              <div className="flex flex-col gap-3 items-start justify-center min-h-[420px]">
-                <span className="text-[#e64a3b] font-bold text-lg">Message sent.</span>
-                <p className="text-neutral-500 text-sm">I&apos;ll get back to you within 24 hours.</p>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <Field
+                label="Name"
+                type="text"
+                value={form.name}
+                onChange={(v) => setForm((f) => ({ ...f, name: v }))}
+                placeholder="Your name"
+                required
+              />
+              <Field
+                label="Email"
+                type="email"
+                value={form.email}
+                onChange={(v) => setForm((f) => ({ ...f, email: v }))}
+                placeholder="you@example.com"
+                required
+              />
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[9px] font-bold tracking-[0.28em] text-neutral-600 uppercase">
+                  Message
+                </label>
+                <textarea
+                  rows={5}
+                  required
+                  value={form.message}
+                  onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+                  placeholder="What are you working on?"
+                  className="w-full bg-transparent border border-neutral-800 rounded-sm px-4 py-3 text-sm text-white placeholder-neutral-700 focus:outline-none focus:border-[#e64a3b] transition-colors resize-none"
+                />
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                <Field
-                  label="Name"
-                  type="text"
-                  value={form.name}
-                  onChange={(v) => setForm((f) => ({ ...f, name: v }))}
-                  placeholder="Your name"
-                  required
-                />
-                <Field
-                  label="Email"
-                  type="email"
-                  value={form.email}
-                  onChange={(v) => setForm((f) => ({ ...f, email: v }))}
-                  placeholder="you@example.com"
-                  required
-                />
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[9px] font-bold tracking-[0.28em] text-neutral-600 uppercase">
-                    Message
-                  </label>
-                  <textarea
-                    rows={5}
-                    required
-                    value={form.message}
-                    onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
-                    placeholder="What are you working on?"
-                    className="w-full bg-transparent border border-neutral-800 rounded-sm px-4 py-3 text-sm text-white placeholder-neutral-700 focus:outline-none focus:border-[#e64a3b] transition-colors resize-none"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="self-start text-[10px] font-bold tracking-[0.3em] uppercase px-6 py-3 border border-[#e64a3b] text-[#e64a3b] hover:bg-[#e64a3b] hover:text-black transition-colors disabled:opacity-50"
-                >
-                  {loading ? "Sending..." : "Send message ->"}
-                </button>
-              </form>
-            )}
+              <button
+                type="submit"
+                className="self-start text-[10px] font-bold tracking-[0.3em] uppercase px-6 py-3 border border-[#e64a3b] text-[#e64a3b] hover:bg-[#e64a3b] hover:text-black transition-colors disabled:opacity-50"
+              >
+                Send email -&gt;
+              </button>
+            </form>
           </div>
 
           {/* Map */}
@@ -98,13 +101,49 @@ export const ContactSection = () => {
                 Based in Indiranagar, Bangalore and available for remote-first collaborations.
               </p>
             </div>
-            <StudioMapCard />
+            <RealMapCard />
           </div>
         </div>
       </div>
     </section>
   )
 }
+
+const RealMapCard = () => (
+  <div className="relative h-[420px] overflow-hidden rounded-sm border border-neutral-800 bg-[#07090b] shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+    <iframe
+      title="Map of Indiranagar, Bangalore, India"
+      src="https://www.google.com/maps?q=Indiranagar%2C%20Bangalore%2C%20India&z=14&output=embed"
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+      className="absolute inset-0 h-full w-full border-0 grayscale invert"
+      allowFullScreen
+    />
+    <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(7,9,11,0.72),transparent_45%,rgba(7,9,11,0.35)),linear-gradient(180deg,rgba(7,9,11,0.2),rgba(7,9,11,0.78))]" />
+
+    <div className="absolute left-5 top-5 rounded-sm border border-white/10 bg-black/45 px-4 py-3 backdrop-blur-md">
+      <p className="text-[9px] font-bold uppercase tracking-[0.28em] text-[#e64a3b]">Google Maps</p>
+      <p className="mt-1 text-sm font-bold text-white">Indiranagar, Bangalore</p>
+      <p className="mt-1 text-xs text-neutral-500">Live area map · India</p>
+    </div>
+
+    <div className="absolute bottom-5 left-5 right-5 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-500">Current waypoint</p>
+        <p className="mt-1 text-3xl font-bold text-white">12.9784° N</p>
+        <p className="text-sm text-neutral-500">77.6408° E · Available worldwide</p>
+      </div>
+      <a
+        href="https://www.google.com/maps/search/?api=1&query=Indiranagar%2C%20Bangalore%2C%20India"
+        target="_blank"
+        rel="noreferrer"
+        className="border border-[#e64a3b] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.28em] text-[#e64a3b] transition-colors hover:bg-[#e64a3b] hover:text-black"
+      >
+        Open map
+      </a>
+    </div>
+  </div>
+)
 
 const StudioMapCard = () => (
   <div className="relative h-[420px] overflow-hidden rounded-sm border border-neutral-800 bg-[#07090b] shadow-[0_24px_80px_rgba(0,0,0,0.45)]">

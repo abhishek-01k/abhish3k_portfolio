@@ -20,33 +20,6 @@ const PROTOCOL_LINKS = [
   { label: "Contact", href: "#contact" },
 ]
 
-const FOOTER_CODES = [
-  "AIBuilder 0x775A...A42A",
-  "Protocol 0x774C...A760",
-  "Founder 0x9C7A...8F16",
-]
-
-const ASCII_ROWS = [
-  "$$$$$$$$$$$$$$XXXXXXXXX.............:::::::....XXXXXXXXXXXX$$$$$$$$$$$$",
-  "$$$$$$$$$$$$XXXXXXXX...........:::::.....:::::......XXXXXXXXXX$$$$$$$$",
-  "$$$$$$$$$$XXXXXX.........::::::.............::::::......XXXXXXXX$$$$$",
-  "$$$$$$$$XXXXX.......::::.....XXXXXXXXXXXXXX.....::::......XXXXXX$$$$",
-  "$$$$$$XXXXX.....::::....XXXXXX$$$$$$$$$$$$XXXXXX....::::....XXXXX$$",
-  "$$$$XXXXX....::::....XXXX$$$$$$$$$$$$$$$$$$$$XXXX....::::....XXXX$$",
-  "$$$XXXXX...::::....XXX$$$$$$XXXXXXXXXXXX$$$$$$XXX....::::....XXXX$",
-  "$$XXXX...::::....XXX$$$$XXXX............XXXX$$$$XXX....::::....XXX$",
-  "$XXXX...::::....XX$$$$XXX......::::......XXX$$$$XX....::::....XXXX",
-  "XXXX....::::....XX$$$$XX....XXXXXXXX....XX$$$$XX....::::....XXXXX",
-  "XXX....::::....XXX$$$$XX...XX$$$$$$XX...XX$$$$XXX....::::....XXX",
-  "XXXX....::::....XXXX$$$$XXXX$$$$$$$$XXXX$$$$XXXX....::::....XXXX",
-  "$XXXX....::::.....XXXX$$$$$$$$$$$$$$$$$$$$XXXX.....::::....XXXXX$",
-  "$$XXXXX....::::......XXXXXX$$$$$$$$$$$$XXXXXX......::::....XXXX$$",
-  "$$$XXXXXX.....::::........XXXXXXXXXXXX........::::.....XXXXXX$$$$",
-  "$$$$$XXXXXXX.......::::....................::::.......XXXXXXX$$$$",
-  "$$$$$$$XXXXXXXXX........::::..........::::........XXXXXXXXX$$$$$$",
-  "$$$$$$$$$XXXXXXXXXXX........................XXXXXXXXXXX$$$$$$$$$",
-]
-
 export const Footer = () => (
   <>
     <section className="relative w-full overflow-hidden border-t border-neutral-800 bg-white text-black">
@@ -104,40 +77,9 @@ export const Footer = () => (
       </div>
 
       <div className="mx-auto flex max-w-6xl flex-col gap-3 border-t border-neutral-300 px-8 py-4 font-mono text-[10px] tracking-[0.08em] text-neutral-400 md:flex-row md:items-center md:justify-between">
-        <span>© MMXXVI · Abhishek · All signals intentional.</span>
+        <span>© MMXXVI · All signals intentional.</span>
         <div className="flex flex-wrap gap-x-5 gap-y-2 md:justify-end">
-          {FOOTER_CODES.map((code) => (
-            <span key={code}>{code}</span>
-          ))}
-        </div>
-      </div>
-
-      <div className="relative h-[240px] overflow-hidden border-t border-neutral-200 sm:h-[300px]">
-        {/* primary drift layer */}
-        <div className="footer-ascii-drift absolute inset-0 flex flex-col items-center justify-center font-mono text-[9px] leading-[0.85] tracking-[0.22em] text-black/10 sm:text-[11px] md:text-[13px]">
-          {ASCII_ROWS.map((row, index) => (
-            <span
-              key={`${row}-${index}`}
-              className={index % 3 === 0 ? "text-black/20" : undefined}
-            >
-              {row}
-            </span>
-          ))}
-        </div>
-        {/* reverse-phase parallax layer */}
-        <div className="footer-ascii-drift-slow absolute inset-0 flex flex-col items-center justify-center font-mono text-[8px] leading-[0.85] tracking-[0.22em] text-black/[0.04] sm:text-[10px] md:text-[12px]">
-          {ASCII_ROWS.map((row, index) => (
-            <span key={`slow-${row}-${index}`}>{row}</span>
-          ))}
-        </div>
-
-        <div className="footer-ascii-glow absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(230,74,59,0.22),transparent_46%)]" />
-        <div className="absolute inset-x-0 top-0 h-20 bg-linear-to-b from-white to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-white to-transparent" />
-        <div className="absolute inset-0 flex items-center justify-center px-6">
-          <p className="footer-word-pulse font-mono text-[clamp(3.5rem,15vw,11rem)] leading-none font-black tracking-[-0.12em] text-[#e64a3b] uppercase">
-            abhish3k
-          </p>
+         Created with ❤️ by Abhishek
         </div>
       </div>
     </section>

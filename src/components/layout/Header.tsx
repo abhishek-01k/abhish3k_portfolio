@@ -11,11 +11,15 @@ import { GlitchButton } from "@/src/components/ui/glitch-button"
 import { cn } from "@/src/lib/utils"
 
 const navLinks = [
-  { label: "About",  href: "#about" },
-  { label: "Work",  href: "#work" },
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
+  { label: "Contact", href: "#contact" },
 ]
 
+const resumeLink =
+  "https://drive.google.com/file/d/1bMG9fpr_DWppDePD5Yc1nWhrC7WUy_t7/view?usp=sharing"
 const HEADER_H = "top-16 sm:top-20"
 
 const Header = () => {
@@ -71,7 +75,7 @@ const Header = () => {
 
         <Link href="/" aria-label="Go to home" className="flex items-center gap-2">
           <Image
-            src="/abhishek_logo_new.png"
+            src="/Abhishek_logo.png"
             alt="Abhishek logo"
             width={44}
             height={44}
@@ -95,7 +99,9 @@ const Header = () => {
               </a>
             </Button>
           ))}
-          <GlitchButton href="#contact">Contact</GlitchButton>
+          <GlitchButton href={resumeLink} target="_blank" rel="noreferrer">
+            Resume
+          </GlitchButton>
         </nav>
 
         <Button
@@ -146,8 +152,13 @@ const Header = () => {
           ))}
 
           <div className="mt-6">
-            <GlitchButton href="#contact" onClick={close}>
-              Contact
+            <GlitchButton
+              href={resumeLink}
+              target="_blank"
+              rel="noreferrer"
+              onClick={close}
+            >
+              Resume
             </GlitchButton>
           </div>
         </nav>
