@@ -37,6 +37,7 @@ export const ExperienceSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const [pinScrollDistance, setPinScrollDistance] = useState(1600)
+  const [isPinnedLayout, setIsPinnedLayout] = useState(false)
 
   const activeItem = TIMELINE[activeIndex]
 
@@ -52,8 +53,18 @@ export const ExperienceSection = () => {
   }
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1024px)")
+    const syncPinnedLayout = () => setIsPinnedLayout(mediaQuery.matches)
+
+    syncPinnedLayout()
+    mediaQuery.addEventListener("change", syncPinnedLayout)
+
+    return () => mediaQuery.removeEventListener("change", syncPinnedLayout)
+  }, [])
+
+  useEffect(() => {
     const container = scrollRef.current
-    if (!container) return undefined
+    if (!container || !isPinnedLayout) return undefined
 
     const measure = () => {
       const maxScroll = Math.max(
@@ -68,9 +79,11 @@ export const ExperienceSection = () => {
     window.addEventListener("resize", measure)
 
     return () => window.removeEventListener("resize", measure)
-  }, [])
+  }, [isPinnedLayout])
 
   useEffect(() => {
+    if (!isPinnedLayout) return undefined
+
     const handleWindowScroll = () => {
       const section = sectionRef.current
       const container = scrollRef.current
@@ -96,9 +109,11 @@ export const ExperienceSection = () => {
     window.addEventListener("scroll", handleWindowScroll, { passive: true })
 
     return () => window.removeEventListener("scroll", handleWindowScroll)
-  }, [pinScrollDistance])
+  }, [isPinnedLayout, pinScrollDistance])
 
   useEffect(() => {
+    if (!isPinnedLayout) return undefined
+
     const handleWindowWheel = (event: globalThis.WheelEvent) => {
       const section = sectionRef.current
       if (!section) return
@@ -136,7 +151,7 @@ export const ExperienceSection = () => {
     window.addEventListener("wheel", handleWindowWheel, { passive: false })
 
     return () => window.removeEventListener("wheel", handleWindowWheel)
-  }, [pinScrollDistance])
+  }, [isPinnedLayout, pinScrollDistance])
 
   const handleScroll = () => {
     const container = scrollRef.current
@@ -150,9 +165,13 @@ export const ExperienceSection = () => {
       ref={sectionRef}
       id="experience"
       className="relative border-t border-neutral-800 bg-[#0e0e0e] text-white"
-      style={{ height: `calc(100vh + ${pinScrollDistance}px)` }}
+      style={
+        isPinnedLayout
+          ? { height: `calc(100vh + ${pinScrollDistance}px)` }
+          : undefined
+      }
     >
-      <div className="sticky top-0 h-screen overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
+      <div className="overflow-hidden px-4 py-8 sm:px-6 sm:py-10 lg:sticky lg:top-0 lg:h-screen lg:px-8 lg:py-8">
         <div
           className="pointer-events-none absolute inset-0 opacity-70"
           style={{
@@ -162,9 +181,9 @@ export const ExperienceSection = () => {
         />
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-size-[72px_72px] opacity-20" />
 
-        <div className="relative mx-auto grid h-full w-full max-w-[1480px] gap-8 lg:grid-cols-[460px_minmax(0,1fr)] lg:gap-12">
-          <aside className="h-full w-full lg:w-[460px]">
-            <div className="flex h-full flex-col justify-between border border-white/10 bg-white/[0.035] p-6 shadow-2xl shadow-black/30 backdrop-blur sm:p-8 lg:p-10">
+        <div className="relative mx-auto grid w-full max-w-[1480px] gap-8 lg:h-full lg:grid-cols-[460px_minmax(0,1fr)] lg:gap-12">
+          <aside className="w-full lg:h-full lg:w-[460px]">
+            <div className="flex h-full flex-col justify-between gap-10 border border-white/10 bg-white/[0.035] p-6 shadow-2xl shadow-black/30 backdrop-blur sm:p-8 lg:gap-0 lg:p-10">
               <div>
                 <div className="mb-8 flex items-center justify-between gap-4">
                   <span className="border border-[#e64a3b] px-2 py-0.5 text-[10px] font-bold tracking-[0.35em] text-[#e64a3b] uppercase">
@@ -179,7 +198,7 @@ export const ExperienceSection = () => {
                 <p className="mb-4 font-mono text-[10px] tracking-[0.32em] text-neutral-500 uppercase">
                   Currently viewing
                 </p>
-                <div className="min-h-60">
+                <div className="lg:min-h-60">
                   <h2 className="max-w-xl text-xl leading-[0.95] font-bold tracking-[-0.07em] text-white sm:text-2xl md:text-3xl lg:text-4xl">
                     {activeItem.company}
                   </h2>
@@ -226,7 +245,7 @@ export const ExperienceSection = () => {
             <div
               ref={scrollRef}
               onScroll={handleScroll}
-              className="min-h-[70vh] scrollbar-none overflow-y-auto lg:h-full lg:min-h-0 [&::-webkit-scrollbar]:hidden"
+              className="scrollbar-none overflow-visible lg:h-full lg:min-h-0 lg:overflow-y-auto [&::-webkit-scrollbar]:hidden"
             >
               <div className="space-y-5 pt-4 pb-8 sm:space-y-7 sm:pt-5 lg:pt-6 lg:pb-10">
                 {TIMELINE.map((item, index) => (
@@ -234,7 +253,7 @@ export const ExperienceSection = () => {
                     key={`${item.company}-${item.role}-${item.year}`}
                     item={item}
                     index={index}
-                    isActive={index === activeIndex}
+                    isActive={!isPinnedLayout || index === activeIndex}
                   />
                 ))}
               </div>

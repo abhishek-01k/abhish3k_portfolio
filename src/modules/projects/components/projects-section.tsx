@@ -171,7 +171,7 @@ const ProjectTile = ({
 
       <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7 lg:p-8">
         <div className="max-w-2xl rounded-2xl border border-transparent bg-black/0 p-5 -m-5 transition duration-300 group-hover:border-white/15 group-hover:bg-black/72 group-hover:shadow-2xl group-hover:backdrop-blur-md group-focus-visible:border-white/15 group-focus-visible:bg-black/72 group-focus-visible:shadow-2xl group-focus-visible:backdrop-blur-md">
-          <h3 className="max-w-[11ch] text-xl font-bold leading-[0.9] tracking-[-0.06em] text-white transition-colors duration-300 group-hover:text-[#e64a3b] sm:text-3xl lg:text-4xl">
+          <h3 className="max-w-[11ch] text-xl font-bold leading-[0.9] tracking-[-0.06em] text-[#e64a3b] transition-colors duration-300 sm:text-3xl lg:text-4xl lg:text-white lg:group-hover:text-[#e64a3b]">
             {project.title}
           </h3>
           <ul className="mt-4 flex max-w-xl list-disc flex-col gap-1.5 pl-4 text-sm leading-relaxed text-white/72 transition duration-300 group-hover:translate-y-0 group-hover:text-white md:translate-y-2 md:opacity-0 md:group-hover:opacity-100">
