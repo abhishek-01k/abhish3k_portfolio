@@ -2,10 +2,8 @@ import { ArrowDownRight } from "lucide-react"
 
 import { cn } from "@/src/lib/utils"
 import InteractiveDots from "./components/dots-pattern"
-import { SkillsMarquee } from "./components/skills-marquee"
 import { StatCounter } from "./components/stat-counter"
-
-const roles = ["Software Developer", "AI Engineer", "Blockchain Developer"]
+import { TypewriterEffect } from "./components/typewriter-effect"
 
 const stats = [
   { value: 4, prefix: "", suffix: "+", label: "Years of Experience",   dark: false },
@@ -42,32 +40,19 @@ const HomePage = () => {
             </div>
           </div>
 
-          {/* Bottom-left: roles + bio */}
-          <div className="flex flex-1 flex-col justify-between p-6 sm:p-8 lg:p-10">
+          {/* Bottom-left: typewriter + bio */}
+          <div className="flex flex-1 flex-col justify-end p-6 sm:p-8 lg:p-10">
             <div>
-              <div className="mb-5 flex flex-wrap items-center gap-x-2 gap-y-1">
-                {roles.map((role, i) => (
-                  <span key={role} className="flex items-center gap-2">
-                    <span className="text-xs font-semibold uppercase tracking-widest text-neutral-400">
-                      {role}
-                    </span>
-                    {i < roles.length - 1 && (
-                      <span className="text-neutral-300">·</span>
-                    )}
-                  </span>
-                ))}
-              </div>
-
               <h2 className="max-w-lg text-3xl font-light leading-snug tracking-tight text-neutral-900 lg:text-4xl xl:text-[2.6rem]">
-                Building products at the intersection of code, AI&nbsp;&amp;&nbsp;web3.
+                <TypewriterEffect />
               </h2>
-            </div>
-
-            <div className="mt-8 flex flex-col gap-4">
-              <p className="max-w-sm text-sm leading-relaxed text-neutral-500">
+              <p className="mt-5 max-w-sm text-sm leading-relaxed text-neutral-500">
                 I design and ship full-stack applications, AI-powered tools,
                 and on-chain protocols — from zero to production.
               </p>
+            </div>
+
+            <div className="mt-8">
               <a
                 href="#work"
                 className="group inline-flex w-fit items-center gap-1.5 text-sm font-medium text-neutral-700 transition-colors hover:text-neutral-900"
@@ -134,8 +119,6 @@ const HomePage = () => {
 
       </section>
 
-      <SkillsMarquee />
-    
     </main>
   )
 }

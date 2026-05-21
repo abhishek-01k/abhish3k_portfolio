@@ -1,8 +1,8 @@
-import { ProjectsSection } from "./components/projects-section"
+import { ProjectsPreview } from "./components/projects-preview"
 
 const ProjectsPage = () => (
   <div className="bg-[#0e0e0e]">
-    <ProjectsSection />
+    <ProjectsPreview />
   </div>
 )
 

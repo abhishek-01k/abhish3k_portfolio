@@ -24,19 +24,17 @@ const HEADER_H = "top-16 sm:top-20"
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [hasLeftHero, setHasLeftHero] = useState(false)
+  const [hasScrolledPastIntro, setHasScrolledPastIntro] = useState(false)
   const pathname = usePathname()
-  const isHomePage = pathname === "/"
 
   useEffect(() => {
-    if (!isHomePage) {
-      return
-    }
-
     const onScroll = () => {
       const hero = document.querySelector<HTMLElement>("[data-home-hero]")
-      const heroBottom = hero?.offsetTop ? hero.offsetTop + hero.offsetHeight : hero?.offsetHeight ?? 0
-      setHasLeftHero(window.scrollY > Math.max(heroBottom - 120, 0))
+      const hideAt = hero
+        ? Math.max(hero.offsetTop + hero.offsetHeight - 120, 0)
+        : 120
+
+      setHasScrolledPastIntro(window.scrollY > hideAt)
     }
 
     onScroll()
@@ -47,14 +45,14 @@ const Header = () => {
       window.removeEventListener("scroll", onScroll)
       window.removeEventListener("resize", onScroll)
     }
-  }, [isHomePage])
+  }, [pathname])
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : ""
     return () => { document.body.style.overflow = "" }
   }, [isOpen])
 
-  const shouldHideHeader = isHomePage && hasLeftHero && !isOpen
+  const shouldHideHeader = hasScrolledPastIntro && !isOpen
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
@@ -170,7 +168,7 @@ const Header = () => {
         onClick={scrollToTop}
         className={cn(
           "fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full border border-border bg-background/85 text-foreground shadow-lg backdrop-blur transition-all duration-700 ease-in-out hover:-translate-y-1 hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:bottom-8 sm:right-8 sm:h-14 sm:w-14",
-          isHomePage && hasLeftHero
+          hasScrolledPastIntro
             ? "translate-y-0 opacity-100"
             : "pointer-events-none translate-y-5 opacity-0",
         )}

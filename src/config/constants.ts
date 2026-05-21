@@ -290,63 +290,39 @@ export const PROJECTS = [
 export const RECOMMENDATIONS = [
   {
     quote:
-      "Abhishek shipped some of the most complex cross-chain infrastructure I've seen from a single engineer. He owns problems end-to-end and never waits to be unblocked.",
-    name: "Harsh Rajat",
-    role: "Founder",
-    company: "Push Chain",
-    initials: "HR",
-    relationship: "Worked together at Push",
-    linkedin: "https://www.linkedin.com/in/harshrajat/",
-  },
-  {
-    quote:
-      "One of the sharpest builders in our cohort. Abhishek's ability to bridge DeFi protocol design with real user experience is rare - he thinks in systems and ships in days.",
+      "Working with Abhishek is quite smooth, he delivers what he commits quite smoothly. From ideation to deployment he stays completely involved and ensures everything stays on track.",
     name: "Rohit Malhotra",
-    role: "Lead",
+    role: "Lead Frontend Engineer",
     company: "Push Chain",
+    photo: "/recommenders/rohit.jpeg",
     initials: "RM",
-    relationship: "Worked together at Push",
+    relationship: "Rohit managed Abhishek directly",
     linkedin: "https://www.linkedin.com/in/rohitmalhotra1420/",
   },
   {
     quote:
-      "Abhishek rebuilt our dashboard in three weeks and cut load time by 80%. Clean code, clear communication, and no nonsense - exactly what a fast-moving startup needs.",
+      "Abhishek has a knack for identifying UX problems that directly improve a product’s conversion rates and has deep insights into the product development lifecycle. I have worked with him on different products over time, and his insights have consistently helped improve our product development cycles.",
+    name: "Sankhya Siddesh",
+    role: "Engineer",
+    company: "Privy (acq by Stripe)",
+    photo: "/recommenders/siddesh.jpeg",
+    initials: "SS",
+    relationship: "Co-founded Farfield together",
+    linkedin: "https://www.linkedin.com/in/sankhyasiddesh/",
+  },
+  {
+    quote:
+      "Abhishek have worked with me on multiple React JS projects for 3-4 months — he has a good understanding of ReactJS and was able to quickly learn and deliver efficient work within the defined time. Certainly someone I’d want to have on my team.",
     name: "Ramesh Upadhaya",
-    role: "Founder",
-    company: "Workspaceio",
+    role: "Full Stack Developer",
+    company: "MERN · React · Next.js · Node",
+    photo: "/recommenders/ramesh_up.jpeg",
     initials: "RU",
-    relationship: "Worked together at Workspaceio",
-    linkedin: "https://www.linkedin.com/in/rameshupadhaya/",
+    relationship: "Managed Abhishek directly",
+    linkedin: "https://www.linkedin.com/in/ramesh-upadhaya/",
   },
 ]
 
-export const SKILLS = [
-    "React",
-    "Next.js",
-    "TypeScript",
-    "Node.js",
-    "Python",
-    "Solidity",
-    "Ethereum",
-    "Web3.js",
-    "Hardhat",
-    "IPFS",
-    "Docker",
-    "Kubernetes",
-    "GraphQL",
-    "Tailwind",
-    "AWS",
-    "PostgreSQL",
-    "MongoDB",
-    "Redis",
-    "LangChain",
-    "OpenAI API",
-    "FastAPI",
-    "Go",
-    "Rust",
-    "Vercel",
-    "TensorFlow",
-]
 
 export const TIMELINE = [
   {

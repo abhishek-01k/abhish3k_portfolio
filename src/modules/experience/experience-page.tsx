@@ -1,9 +1,9 @@
-import { ExperienceSection } from "./components/experience-section"
+import { ExperiencePreview } from "./components/experience-preview"
 
 const ExperiencePage = () => {
   return (
-    <div className="">
-      <ExperienceSection />
+    <div>
+      <ExperiencePreview />
     </div>
   )
 }

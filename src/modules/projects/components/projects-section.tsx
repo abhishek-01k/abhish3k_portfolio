@@ -145,7 +145,7 @@ const ProjectTile = ({
       {isVideo ? (
         <video
           src={project.image}
-          className="absolute inset-0 h-full w-full object-cover opacity-80 grayscale transition duration-700 ease-out group-hover:scale-105 group-hover:opacity-100 group-hover:grayscale-0"
+          className="absolute inset-0 h-full w-full object-contain opacity-80 grayscale transition duration-700 ease-out group-hover:scale-105 group-hover:opacity-100 group-hover:grayscale-0"
           autoPlay
           loop
           muted
@@ -158,7 +158,7 @@ const ProjectTile = ({
           alt=""
           fill
           sizes="(min-width: 1024px) 50vw, 100vw"
-          className="object-cover opacity-80 grayscale transition duration-700 ease-out group-hover:scale-105 group-hover:opacity-100 group-hover:grayscale-0"
+          className="object-contain opacity-80 grayscale transition duration-700 ease-out group-hover:scale-105 group-hover:opacity-100 group-hover:grayscale-0"
         />
       )}
       <div className="absolute inset-0 bg-linear-to-b from-black/20 via-black/25 to-black/92 transition duration-500 group-hover:from-black/5 group-hover:via-black/10 group-hover:to-black/82" />
