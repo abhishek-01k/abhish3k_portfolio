@@ -167,6 +167,15 @@ export const PROJECTS = [
       "Enables seamless token swaps across connected ecosystems.",
       "Reached 1,000+ MAUs with LP positions, pools, and portfolio tracking.",
     ],
+    about:
+      "Ramenfi is the first onchain DEX built natively on Push Chain — a consumer-first L1. It lets users swap tokens, provide liquidity, and track their portfolio across the Push ecosystem, all from a single interface.",
+    longDescription:
+      "Building Ramenfi meant solving problems no existing DEX template covered: a brand-new chain with no liquidity bootstrapping playbook, no existing tooling, and a user base coming from Web3-native communities expecting a polished experience. The app shipped with LP position management, pool discovery, real-time price feeds, and a full portfolio view — built entirely from scratch in collaboration with the Push Chain core team.",
+    problemsTackled: [
+      "Bootstrapped liquidity on a brand-new chain with no prior DEX infrastructure, designing incentive flows that attracted early LPs without overpaying in emissions.",
+      "Built a multi-wallet connection layer that unified on-chain identity across heterogeneous chains so users could interact seamlessly regardless of their wallet setup.",
+      "Architected the YieldFarming V2 engine to handle $16M+ TVL at a sustained 15% APY without downtime or position loss during contract upgrades.",
+    ],
     github: "https://github.com/pushchain/push-chain-internal-ramenfi-deployment",
     live: "https://www.ramenfi.xyz/",
     image: "/projects/Ramenfi_demo.mp4",
@@ -178,6 +187,15 @@ export const PROJECTS = [
       "AI-powered adaptive learning platform for personalized education.",
       "Backed by Tavastra VC and Google for Startups.",
       "Onboarded 2,500+ users in 24 hours with RAG-driven content pipelines.",
+    ],
+    about:
+      "Omnitutor is an AI-powered adaptive learning platform backed by Tavastra VC and Google for Startups. It uses RAG-driven content pipelines to deliver personalized learning paths that recalibrate in real time based on how each student interacts with the material.",
+    longDescription:
+      "The core challenge was building an AI tutor that genuinely adapts — not just streams completions, but recalibrates content difficulty and topic sequencing based on interaction patterns. We combined retrieval-augmented generation with a real-time evaluation layer, and shipped from zero to 2,500+ users within the first 24 hours of launch with no service degradation.",
+    problemsTackled: [
+      "Designed a RAG pipeline that retrieves relevant course material and reranks content against each learner's history in real time, keeping responses accurate and contextually grounded.",
+      "Built a cold-start onboarding flow that collects enough signal in under two minutes to meaningfully personalize the first learning session with no prior user data.",
+      "Scaled the inference and retrieval backend to absorb a 2,500-user spike on day one without degrading response latency or retrieval quality.",
     ],
     github: "https://github.com/abhish3k",
     live: "https://omnitutor.live/",
@@ -191,6 +209,15 @@ export const PROJECTS = [
       "Streamlined onboarding for chain-native accounts.",
       "Designed wallet UX for cross-chain app access.",
     ],
+    about:
+      "Push Wallet is the universal Web3 wallet built for Push Chain. It strips away the seed-phrase friction that blocks most new users and replaces it with a streamlined account creation flow, while still giving power users full cross-chain app access from a single identity.",
+    longDescription:
+      "The wallet was designed to feel as simple as creating a web2 account — no seed phrase in the critical onboarding path, social recovery built in, and a UI that does not assume prior Web3 experience. Under the hood it handles cross-chain account abstraction so users can jump between Push ecosystem apps without re-connecting or re-approving.",
+    problemsTackled: [
+      "Removed seed phrase friction from the critical onboarding path without compromising key custody or recovery options for advanced users.",
+      "Built cross-chain account abstraction so one Push Chain identity grants access to multiple ecosystem apps without extra wallet setup.",
+      "Implemented a real-time transaction status layer with streaming feedback so users always know exactly where their on-chain operation stands.",
+    ],
     github: "https://github.com/abhish3k",
     live: "https://wallet.push.org/",
     image: "/projects/push_wallet.png",
@@ -203,7 +230,15 @@ export const PROJECTS = [
       "Lets users claim network funds quickly.",
       "Helps teams onboard into Push ecosystem apps faster.",
     ],
-    tags: ["React", "TypeScript", "Web3", "Faucet", "Push Chain"],
+    about:
+      "Push Faucet is a token distribution tool for Push Chain developers and testers. It provides instant testnet fund claims to accelerate ecosystem onboarding, with abuse protection that stays invisible to legitimate users.",
+    longDescription:
+      "Faucets sound simple but carry real abuse surface: rate limiting, Sybil resistance, and reliable fund delivery under load all have to work together without adding friction for legitimate developers. Push Faucet was built to handle all three, with wallet validation and claim-rate logic that kept the reserves intact through high-traffic ecosystem events.",
+    problemsTackled: [
+      "Implemented rate limiting and Sybil resistance that blocks abuse patterns without adding any visible friction to legitimate developer claim flows.",
+      "Ensured reliable fund delivery under concurrent claim spikes during major ecosystem launch events with no failed transactions or stuck queues.",
+      "Added wallet address validation at the claim boundary to prevent invalid or misconfigured addresses from silently consuming faucet reserves.",
+    ],
     github: "https://github.com/abhish3k",
     live: "https://faucet.push.org/",
     image: "/projects/Push_Faucet.png",
@@ -216,7 +251,15 @@ export const PROJECTS = [
       "Improved DeFi UX for tracking positions and incentives.",
       "Supports interactions with Push ecosystem pools.",
     ],
-    tags: ["React", "TypeScript", "DeFi", "Staking", "Web3"],
+    about:
+      "Yield Farming V2 is a full rearchitecture of Push's staking and rewards interface. It replaced the V1 contract architecture with a new engine that supports Uni-V2 LP token staking alongside native PUSH, while delivering a significantly cleaner DeFi UX for managing positions and tracking incentives.",
+    longDescription:
+      "V2 meant new contracts, a new UI, and a live migration path for V1 stakers — all without disrupting existing positions or reward accrual. The biggest engineering challenge was maintaining continuity for stakers who had capital at risk while introducing new pool types and incentive structures on top of a rewritten contract layer.",
+    problemsTackled: [
+      "Managed a live migration from V1 to V2 contracts while preserving all staked positions and maintaining uninterrupted reward accrual throughout the transition.",
+      "Architected support for Uni-V2 LP tokens alongside native PUSH staking in a single unified interface without fragmenting the user experience.",
+      "Kept $16M+ TVL secure at a sustained 15% APY across the upgrade window with no smart contract downtime or loss of user funds.",
+    ],
     github: "https://github.com/abhish3k",
     live: "https://app.push.org/yield",
     image: "/projects/Push_Yield_farming.png",

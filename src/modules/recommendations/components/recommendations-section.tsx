@@ -40,28 +40,29 @@ export const RecommendationsSection = () => {
       className="w-full overflow-hidden bg-[#f7f4ee] px-5 py-12 text-stone-950 sm:px-6 lg:py-18"
     >
       <div className="mx-auto max-w-3xl">
-        <div className="mx-auto mb-7 max-w-xl text-center sm:mb-8">
-          <p className="mx-auto w-fit rounded-full bg-stone-950 px-4 py-2 text-xs font-medium text-white shadow-[0_12px_28px_rgba(28,25,23,0.22)]">
-            Recommendations
-          </p>
-          <h2 className="mt-5 text-3xl font-black leading-none tracking-tighter text-stone-950 sm:text-4xl lg:text-5xl">
+        <div className="text-right">
+          <span className="border border-[#e64a3b] px-2 py-0.5 text-[10px] font-bold tracking-[0.35em] text-[#e64a3b] uppercase">
+            {"// Recommendations"}
+          </span>
+        </div>
+        <div className="mb-7 flex max-w-xl flex-col gap-3 sm:mb-8">
+          <h2 className="mt-5 text-3xl leading-none font-black tracking-tighter text-stone-950 sm:text-4xl lg:text-5xl">
             What my co-workers say about me.
           </h2>
         </div>
-
         <div className="mx-auto mb-6 flex max-w-sm justify-center">
           <div className="flex -space-x-3">
             {RECOMMENDATIONS.map((rec) => (
               <div
                 key={rec.name}
-                className="relative size-12 overflow-hidden rounded-full border-2 border-[#f7f4ee] shadow-sm"
+                className="recommendation-avatar-radius relative size-12 overflow-hidden rounded-full border-2 border-[#f7f4ee] shadow-sm"
               >
                 <Image
                   src={rec.photo}
                   alt={rec.name}
                   fill
                   sizes="48px"
-                  className="object-cover"
+                  className="recommendation-avatar-radius object-cover"
                 />
               </div>
             ))}

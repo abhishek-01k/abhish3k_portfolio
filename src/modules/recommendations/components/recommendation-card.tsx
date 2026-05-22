@@ -15,13 +15,13 @@ const RecommendationCard = ({ rec }: { rec: Recommendation }) => (
   <article className="flex min-h-[300px] flex-col justify-between rounded-[1.5rem] bg-[#e9e9e9] p-5 text-stone-950 shadow-inner sm:min-h-[280px] sm:p-7">
     <div>
       <div className="flex items-center gap-4">
-        <div className="relative size-12 shrink-0 overflow-hidden rounded-full shadow-[0_10px_24px_rgba(28,25,23,0.18)]">
+        <div className="recommendation-avatar-radius relative size-12 shrink-0 overflow-hidden rounded-full shadow-[0_10px_24px_rgba(28,25,23,0.18)]">
           <Image
             src={rec.photo}
             alt={rec.name}
             fill
             sizes="48px"
-            className="object-cover"
+            className="recommendation-avatar-radius object-cover"
           />
         </div>
         <div>
@@ -39,18 +39,8 @@ const RecommendationCard = ({ rec }: { rec: Recommendation }) => (
 
     <div className="mt-8 flex flex-wrap items-end justify-between gap-4">
       <div>
-        <div
-          className="flex gap-1 text-stone-950"
-          aria-label="5 star recommendation"
-        >
-          {Array.from({ length: 5 }).map((_, index) => (
-            <span key={index} className="text-lg leading-none">
-              ★
-            </span>
-          ))}
-        </div>
         {rec.relationship && (
-          <p className="mt-3 text-sm text-stone-500">{rec.relationship}</p>
+          <p className="text-sm text-stone-500">{rec.relationship}</p>
         )}
       </div>
 

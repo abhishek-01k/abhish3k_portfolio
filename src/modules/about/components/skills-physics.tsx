@@ -8,30 +8,38 @@ import { cn } from "@/src/lib/utils"
 interface Skill { name: string; img: string; radius: number }
 
 const SKILLS: Skill[] = [
-  { name: "React",       img: "/skills/ReactJs.svg",      radius: 58 },
-  { name: "Next.js",     img: "/skills/NextJs",           radius: 52 },
-  { name: "TypeScript",  img: "/skills/typescript.webp",  radius: 56 },
-  { name: "Tailwind",    img: "/skills/tailwindcss.webp", radius: 50 },
-  { name: "Fastify",     img: "/skills/Fastify.webp",     radius: 46 },
-  { name: "Figma",       img: "/skills/Figma.webp",       radius: 52 },
-  { name: "GitHub",      img: "/skills/github.webp",      radius: 48 },
-  { name: "Node.js",     img: "/skills/nodejs.webp",      radius: 56 },
-  { name: "Python",      img: "/skills/python.webp",      radius: 54 },
-  { name: "PostgreSQL",  img: "/skills/postgresql.webp",  radius: 50 },
-  { name: "MongoDB",     img: "/skills/mongoDb.webp",     radius: 52 },
-  { name: "Docker",      img: "/skills/docker.webp",      radius: 58 },
-  { name: "LangChain",   img: "/skills/langchain.webp",   radius: 46 },
-  { name: "Ollama",      img: "/skills/ollama.webp",      radius: 50 },
-  { name: "C++",         img: "/skills/C++.webp",         radius: 48 },
-  { name: "OpenAI",      img: "/skills/openai.webp",      radius: 54 },
-  { name: "Anthropic",   img: "/skills/anthropic.webp",   radius: 60 },
-  { name: "Postman",     img: "/skills/postman.webp",     radius: 52 },
+  // xl
+  { name: "React",        img: "/skill_balls/ReactJs.png",       radius: 75 },
+  { name: "TypeScript",   img: "/skill_balls/Typescript.png",    radius: 70 },
+  { name: "Docker",       img: "/skill_balls/Docker.png",        radius: 72 },
+  // lg
+  { name: "Next.js",      img: "/skill_balls/NextJs.png",        radius: 63 },
+  { name: "Node.js",      img: "/skill_balls/NodeJs.png",        radius: 65 },
+  { name: "Python",       img: "/skill_balls/Python.png",        radius: 62 },
+  { name: "GCP",          img: "/skill_balls/GCP.png",           radius: 60 },
+  // md
+  { name: "MongoDB",      img: "/skill_balls/MongoDB.png",       radius: 52 },
+  { name: "PostgreSQL",   img: "/skill_balls/PostgresQL.png",    radius: 50 },
+  { name: "Firebase",     img: "/skill_balls/Firebase.png",      radius: 54 },
+  { name: "Kubernetes",   img: "/skill_balls/Kubernetes.png",    radius: 52 },
+  { name: "GraphQL",      img: "/skill_balls/graphql.png",       radius: 50 },
+  { name: "React Query",  img: "/skill_balls/react query .png",  radius: 48 },
+  // sm
+  { name: "GitHub",       img: "/skill_balls/github.png",        radius: 42 },
+  { name: "Redis",        img: "/skill_balls/redis.png",         radius: 40 },
+  { name: "Redux",        img: "/skill_balls/redux.png",         radius: 38 },
+  { name: "Vercel",       img: "/skill_balls/vercel.png",        radius: 42 },
+  { name: "LangChain",    img: "/skill_balls/langchain.png",     radius: 40 },
+  // xs
+  { name: "Fastify",      img: "/skill_balls/Fastify.png",       radius: 33 },
+  { name: "Postman",      img: "/skill_balls/postman.png",       radius: 32 },
+  { name: "ChromaDB",     img: "/skill_balls/chromadb.png",      radius: 30 },
+  { name: "C++",          img: "/skill_balls/C++.png",           radius: 35 },
 ]
 
-// ── Golf-ball renderer ────────────────────────────────────────
-// Draws a shiny white sphere with the skill logo as a centre sticker.
-// All gradients are in world-space; only the logo rotates with the body.
-function drawGolfBall(
+// ── Ball renderer ─────────────────────────────────────────────
+// Clips the pre-made skill_balls image to a circle — no extra shading.
+function drawSkillBall(
   ctx:   CanvasRenderingContext2D,
   x:     number,
   y:     number,
@@ -39,135 +47,20 @@ function drawGolfBall(
   angle: number,
   img:   HTMLImageElement | null
 ) {
-  // ── 1. Base sphere — white-to-grey gradient mimicking a lit sphere ──
-  // Light source: upper-left at ~(-0.38r, -0.40r)
-  const baseGrad = ctx.createRadialGradient(
-    x - r * 0.38, y - r * 0.40, r * 0.01,   // focal point (highlight)
-    x + r * 0.12, y + r * 0.14, r * 1.04    // shadow centre (slightly offset)
-  )
-  baseGrad.addColorStop(0,    "#ffffff")
-  baseGrad.addColorStop(0.22, "#f6f6f4")
-  baseGrad.addColorStop(0.52, "#e4e4e0")
-  baseGrad.addColorStop(0.78, "#b8b8b4")
-  baseGrad.addColorStop(0.92, "#787874")
-  baseGrad.addColorStop(1,    "#3c3c3a")
-
   ctx.save()
   ctx.beginPath()
   ctx.arc(x, y, r, 0, Math.PI * 2)
-  ctx.fillStyle = baseGrad
-  ctx.fill()
-  ctx.restore()
-
-  // ── 2. Subtle dimple hint — very faint dot grid, rotates with ball ──
-  ctx.save()
-  ctx.translate(x, y)
-  ctx.rotate(angle)
-  ctx.globalAlpha = 0.045
-
-  const step   = r * 0.30
-  const dimR   = r * 0.055
-  const bound2 = r * r * 0.68
-
-  for (let xi = -3; xi <= 3; xi++) {
-    for (let yi = -3; yi <= 3; yi++) {
-      const dx = xi * step + (yi % 2 === 0 ? step * 0.5 : 0)
-      const dy = yi * step
-      if (dx * dx + dy * dy < bound2) {
-        const dg = ctx.createRadialGradient(dx - dimR * 0.4, dy - dimR * 0.4, 0, dx, dy, dimR)
-        dg.addColorStop(0, "#000")
-        dg.addColorStop(1, "transparent")
-        ctx.beginPath()
-        ctx.arc(dx, dy, dimR, 0, Math.PI * 2)
-        ctx.fillStyle = dg
-        ctx.fill()
-      }
-    }
-  }
-
-  ctx.globalAlpha = 1
-  ctx.restore()
-
-  // ── 3. Skill logo — sticker in centre, rotates with the ball ──────
-  const sr = r * 0.54   // sticker radius
+  ctx.clip()
 
   if (img) {
-    ctx.save()
-    // Clip to sticker circle
-    ctx.beginPath()
-    ctx.arc(x, y, sr, 0, Math.PI * 2)
-    ctx.clip()
     ctx.translate(x, y)
     ctx.rotate(angle)
-    ctx.drawImage(img, -sr, -sr, sr * 2, sr * 2)
-
-    // Dim the sticker edges so it looks inset into the sphere
-    const inset = ctx.createRadialGradient(0, 0, sr * 0.45, 0, 0, sr)
-    inset.addColorStop(0,   "rgba(0,0,0,0)")
-    inset.addColorStop(0.75,"rgba(0,0,0,0)")
-    inset.addColorStop(1,   "rgba(0,0,0,0.42)")
-    ctx.beginPath()
-    ctx.arc(0, 0, sr, 0, Math.PI * 2)
-    ctx.fillStyle = inset
+    ctx.drawImage(img, -r, -r, r * 2, r * 2)
+  } else {
+    ctx.fillStyle = "#2a2a2a"
     ctx.fill()
-    ctx.restore()
   }
 
-  // ── 4. Primary specular — large, soft top-left blush ─────────────
-  const spec1 = ctx.createRadialGradient(
-    x - r * 0.28, y - r * 0.34, 0,
-    x - r * 0.18, y - r * 0.22, r * 0.58
-  )
-  spec1.addColorStop(0,    "rgba(255,255,255,0.88)")
-  spec1.addColorStop(0.35, "rgba(255,255,255,0.42)")
-  spec1.addColorStop(0.75, "rgba(255,255,255,0.10)")
-  spec1.addColorStop(1,    "rgba(255,255,255,0)")
-
-  ctx.save()
-  ctx.beginPath()
-  ctx.arc(x, y, r, 0, Math.PI * 2)
-  ctx.fillStyle = spec1
-  ctx.fill()
-  ctx.restore()
-
-  // ── 5. Secondary specular — tight, super-bright "ping" point ─────
-  const spec2 = ctx.createRadialGradient(
-    x - r * 0.30, y - r * 0.36, 0,
-    x - r * 0.26, y - r * 0.31, r * 0.20
-  )
-  spec2.addColorStop(0,    "rgba(255,255,255,1)")
-  spec2.addColorStop(0.45, "rgba(255,255,255,0.80)")
-  spec2.addColorStop(1,    "rgba(255,255,255,0)")
-
-  ctx.save()
-  ctx.beginPath()
-  ctx.arc(x, y, r, 0, Math.PI * 2)
-  ctx.fillStyle = spec2
-  ctx.fill()
-  ctx.restore()
-
-  // ── 6. Bottom environment bounce — faint warm glow from below ────
-  const envGlow = ctx.createRadialGradient(
-    x + r * 0.18, y + r * 0.55, 0,
-    x + r * 0.12, y + r * 0.45, r * 0.55
-  )
-  envGlow.addColorStop(0,    "rgba(255,255,255,0.14)")
-  envGlow.addColorStop(1,    "rgba(255,255,255,0)")
-
-  ctx.save()
-  ctx.beginPath()
-  ctx.arc(x, y, r, 0, Math.PI * 2)
-  ctx.fillStyle = envGlow
-  ctx.fill()
-  ctx.restore()
-
-  // ── 7. Thin outer rim to separate from dark background ───────────
-  ctx.save()
-  ctx.beginPath()
-  ctx.arc(x, y, r, 0, Math.PI * 2)
-  ctx.strokeStyle = "rgba(255,255,255,0.18)"
-  ctx.lineWidth   = 1
-  ctx.stroke()
   ctx.restore()
 }
 
@@ -189,20 +82,23 @@ function initPhysics(
 ): () => void {
   const { Engine, Render, Runner, Bodies, Composite, Mouse, MouseConstraint, Events } = Matter
 
-  const W = container.offsetWidth
-  const H = container.offsetHeight
+  const W   = container.offsetWidth
+  const H   = container.offsetHeight
+  const dpr = window.devicePixelRatio || 1
 
   const engine = Engine.create({ gravity: { y: 1.2 } })
   const runner  = Runner.create()
 
   const canvas = document.createElement("canvas")
-  canvas.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;display:block;"
+  // Explicit px dimensions prevent CSS percentage from stretching
+  // the canvas non-uniformly and turning circles into ovals.
+  canvas.style.cssText = `position:absolute;top:0;left:0;width:${W}px;height:${H}px;display:block;mix-blend-mode:screen;`
   container.appendChild(canvas)
 
   const render = Render.create({
     canvas,
     engine,
-    options: { width: W, height: H, wireframes: false, background: "transparent" },
+    options: { width: W, height: H, pixelRatio: dpr, wireframes: false, background: "transparent" },
   })
 
   // Four walls — nothing escapes
@@ -250,7 +146,7 @@ function initPhysics(
   // Custom rendering — golf balls
   Events.on(render, "afterRender", () => {
     bodies.forEach((body, i) => {
-      drawGolfBall(
+      drawSkillBall(
         render.context,
         body.position.x,
         body.position.y,
@@ -317,7 +213,7 @@ export const SkillsPhysicsCanvas = ({ className }: { className?: string }) => {
 
 // ── Standalone section ────────────────────────────────────────
 export const SkillsPhysics = () => (
-  <section id="skills" className="border-t border-neutral-800 bg-[#0e0e0e] text-white">
+  <section id="skills" className="hidden border-t border-neutral-800 bg-[#0e0e0e] text-white lg:block">
     <div className="mx-auto max-w-6xl border-x border-neutral-800">
       <div className="flex items-end justify-between px-8 pt-8 pb-4">
         <div>

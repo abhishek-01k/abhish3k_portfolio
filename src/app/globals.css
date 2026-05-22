@@ -78,7 +78,7 @@
     --chart-3: oklch(0.439 0 0);
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
-    --radius: 0.625rem;
+    --radius: 0px;
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);
@@ -90,8 +90,15 @@
 }
 
 @layer base {
-  * {
+  *,
+  *::before,
+  *::after {
     @apply border-border outline-ring/50;
+    }
+  *:not(.recommendation-avatar-radius):not(.recommendation-avatar-radius *):not(.project-view-cursor-radius),
+  *:not(.recommendation-avatar-radius):not(.recommendation-avatar-radius *):not(.project-view-cursor-radius)::before,
+  *:not(.recommendation-avatar-radius):not(.recommendation-avatar-radius *):not(.project-view-cursor-radius)::after {
+    border-radius: 0 !important;
     }
   body {
     @apply bg-background text-foreground;
@@ -99,6 +106,12 @@
   html {
     @apply font-sans;
     }
+}
+
+.recommendation-avatar-radius,
+.recommendation-avatar-radius img,
+.project-view-cursor-radius {
+  border-radius: 9999px !important;
 }
 
 /* ── Typewriter cursor blink ──────────────────────────────── */
