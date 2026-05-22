@@ -1,7 +1,8 @@
 "use client"
 
-import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
+
+import { ScrollReveal } from "@/src/components/scroll-reveal"
 
 type SkillBall = {
   name: string
@@ -93,15 +94,6 @@ const getSkillRadius = (width: number) => {
   return 52
 }
 
-const START_SCREEN_SKILLS = [
-  { skill: SKILL_BALLS[0], className: "left-[7%] top-[18%] size-20 rotate-[-14deg] sm:size-24 lg:size-32" },
-  { skill: SKILL_BALLS[1], className: "right-[8%] top-[14%] size-24 rotate-[12deg] sm:size-28 lg:size-36" },
-  { skill: SKILL_BALLS[3], className: "left-[15%] top-[48%] size-16 rotate-[18deg] sm:size-24 lg:left-[22%] lg:size-32" },
-  { skill: SKILL_BALLS[5], className: "right-[14%] top-[44%] size-18 rotate-[-10deg] sm:size-24 lg:right-[24%] lg:size-32" },
-  { skill: SKILL_BALLS[10], className: "left-[42%] top-[24%] size-16 rotate-[9deg] sm:size-20 lg:size-28" },
-  { skill: SKILL_BALLS[15], className: "right-[38%] bottom-[14%] size-18 rotate-[-18deg] sm:size-24 lg:size-32" },
-]
-
 const shuffleSkillIndexes = () => {
   const indexes = SKILL_BALLS.map((_, index) => index)
 
@@ -192,10 +184,167 @@ const drawSlicePiece = (
   ctx.restore()
 }
 
+const getFreefallRadius = (width: number) => {
+  if (width >= 1024) return 42
+  if (width >= 640) return 34
+
+  return 26
+}
+
+type SkillFreefallCanvasProps = {
+  cardRect: DOMRect | null
+  images: (HTMLImageElement | null)[]
+}
+
+const SkillFreefallCanvas = ({ cardRect, images }: SkillFreefallCanvasProps) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    let cleanup: (() => void) | undefined
+    let cancelled = false
+
+    const run = async () => {
+      const [Matter, freefallImages] = await Promise.all([
+        import("matter-js").then((module) => module.default),
+        images.length === SKILL_BALLS.length ? Promise.resolve(images) : loadSkillImages(),
+      ])
+      if (cancelled || !containerRef.current) return
+
+      const { Engine, Runner, Render, Bodies, Body, Composite, Events } = Matter
+      const width = container.clientWidth
+      const height = container.clientHeight
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      const radius = getFreefallRadius(width)
+      const engine = Engine.create({ gravity: { x: 0, y: 1.15 } })
+      const runner = Runner.create()
+      const canvas = document.createElement("canvas")
+
+      canvas.style.cssText = "position:absolute;inset:0;width:100%;height:100%;display:block;"
+      container.appendChild(canvas)
+
+      const render = Render.create({
+        canvas,
+        engine,
+        options: {
+          width,
+          height,
+          pixelRatio: dpr,
+          wireframes: false,
+          background: "transparent",
+        },
+      })
+
+      const wallOptions = {
+        isStatic: true,
+        render: { fillStyle: "transparent", strokeStyle: "transparent" },
+      }
+      const wallThickness = 120
+      const floor = Bodies.rectangle(
+        width / 2,
+        height + wallThickness / 2 - 22,
+        width + wallThickness * 2,
+        wallThickness,
+        wallOptions
+      )
+      const leftWall = Bodies.rectangle(
+        -wallThickness / 2,
+        height / 2,
+        wallThickness,
+        height * 2,
+        wallOptions
+      )
+      const rightWall = Bodies.rectangle(
+        width + wallThickness / 2,
+        height / 2,
+        wallThickness,
+        height * 2,
+        wallOptions
+      )
+      const cardBody = cardRect
+        ? Bodies.rectangle(
+            cardRect.left + cardRect.width / 2,
+            cardRect.top + cardRect.height / 2,
+            cardRect.width,
+            cardRect.height,
+            wallOptions
+          )
+        : null
+
+      const cols = Math.min(SKILL_BALLS.length, width >= 900 ? 9 : width >= 560 ? 6 : 4)
+      const bodies = SKILL_BALLS.map((_, index) => {
+        const col = index % cols
+        const row = Math.floor(index / cols)
+        const x = ((col + 0.5) / cols) * width + ((index % 3) - 1) * radius * 0.34
+        const y = -radius * (2.5 + row * 1.25)
+        const body = Bodies.circle(x, y, radius, {
+          restitution: 0.38,
+          friction: 0.08,
+          frictionAir: 0.012,
+          density: 0.0018,
+          render: { fillStyle: "transparent", strokeStyle: "transparent" },
+        })
+
+        Body.setAngularVelocity(body, ((index % 5) - 2) * 0.055)
+        Body.setVelocity(body, {
+          x: ((index % 7) - 3) * 0.8,
+          y: 0.4 + row * 0.15,
+        })
+
+        return body
+      })
+
+      Composite.add(
+        engine.world,
+        [floor, leftWall, rightWall, cardBody, ...bodies].filter((body) => body !== null)
+      )
+
+      Events.on(render, "afterRender", () => {
+        const ctx = render.context
+
+        bodies.forEach((body, index) => {
+          drawSkillBall(ctx, freefallImages[index], {
+            x: body.position.x,
+            y: body.position.y,
+            radius,
+            angle: body.angle,
+          })
+        })
+      })
+
+      Render.run(render)
+      Runner.run(runner, engine)
+
+      cleanup = () => {
+        Runner.stop(runner)
+        Render.stop(render)
+        Composite.clear(engine.world, false)
+        Engine.clear(engine)
+        render.canvas.remove()
+        render.textures = {}
+      }
+    }
+
+    run()
+
+    return () => {
+      cancelled = true
+      cleanup?.()
+    }
+  }, [cardRect, images])
+
+  return <div ref={containerRef} className="pointer-events-none absolute inset-0" aria-hidden="true" />
+}
+
 export const SkillSlashGame = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const idleCardRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
   const imagesRef = useRef<(HTMLImageElement | null)[] | null>(null)
+  const [idleCardRect, setIdleCardRect] = useState<DOMRect | null>(null)
+  const [isSectionVisible, setIsSectionVisible] = useState(false)
   const [isStarted, setIsStarted] = useState(false)
   const [isRoundComplete, setIsRoundComplete] = useState(false)
   const [score, setScore] = useState(0)
@@ -214,6 +363,61 @@ export const SkillSlashGame = () => {
       cancelled = true
     }
   }, [])
+
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsSectionVisible(entry.isIntersecting)
+      },
+      { threshold: 0.18 }
+    )
+
+    observer.observe(section)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isStarted) {
+      setIdleCardRect(null)
+      return
+    }
+
+    const section = sectionRef.current
+    const card = idleCardRef.current
+    if (!section || !card) return
+
+    const measureCard = () => {
+      const sectionRect = section.getBoundingClientRect()
+      const cardViewportRect = card.getBoundingClientRect()
+
+      setIdleCardRect(
+        new DOMRect(
+          cardViewportRect.left - sectionRect.left,
+          cardViewportRect.top - sectionRect.top,
+          cardViewportRect.width,
+          cardViewportRect.height
+        )
+      )
+    }
+
+    measureCard()
+
+    const resizeObserver = new ResizeObserver(measureCard)
+    resizeObserver.observe(section)
+    resizeObserver.observe(card)
+    window.addEventListener("resize", measureCard)
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener("resize", measureCard)
+    }
+  }, [isStarted, isRoundComplete])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -600,31 +804,32 @@ export const SkillSlashGame = () => {
           className={`absolute inset-0 z-0 ${isStarted ? "touch-none" : "pointer-events-none"}`}
         />
 
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between px-5 pt-6">
+        <ScrollReveal className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between gap-3 px-3 pt-4 sm:px-5 sm:pt-6">
           <div>
             <span className="border border-[#e64a3b] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.35em] text-[#e64a3b]">
               {"// Skill Slash"}
             </span>
-            <h2 className="mt-3 max-w-[11ch] text-4xl leading-none font-black tracking-tighter text-white sm:text-5xl">
+            <h2 className="mt-3 max-w-[9ch] text-3xl leading-none font-black tracking-tighter text-white sm:max-w-[11ch] sm:text-5xl">
               Slice the stack.
             </h2>
           </div>
 
-          <div className="border border-white/15 bg-black/35 px-3 py-2 text-right backdrop-blur">
-            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-neutral-500">
+          <div className="shrink-0 border border-white/15 bg-black/45 px-2 py-1.5 text-right backdrop-blur sm:px-3 sm:py-2">
+            <p className="whitespace-nowrap text-[9px] font-bold uppercase tracking-[0.18em] text-neutral-500 sm:text-[10px] sm:tracking-[0.28em]">
               Score / Time
             </p>
-            <p className="font-mono text-3xl font-black text-[#e64a3b] tabular-nums">
+            <p className="font-mono text-2xl leading-none font-black text-[#e64a3b] tabular-nums sm:text-3xl">
               {String(score).padStart(2, "0")} / {String(timeLeft).padStart(2, "0")}
             </p>
           </div>
-        </div>
+        </ScrollReveal>
 
         {isStarted ? (
           <button
             type="button"
             onClick={() => {
-              setIsRoundComplete(false)
+              setIsRoundComplete(true)
+              setTimeLeft(0)
               setIsStarted(false)
             }}
             className="absolute right-5 bottom-7 z-20 border border-white/20 bg-black/55 px-4 py-3 text-[10px] font-black uppercase tracking-[0.28em] text-white backdrop-blur transition-colors active:border-[#e64a3b] active:bg-[#e64a3b]"
@@ -635,20 +840,14 @@ export const SkillSlashGame = () => {
 
         {!isStarted ? (
           <div className="absolute inset-0 z-20 flex items-end justify-center bg-linear-to-t from-[#0e0e0e] via-[#0e0e0e]/78 to-transparent px-5 pb-12">
-            <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-              {START_SCREEN_SKILLS.map(({ skill, className }) => (
-                <Image
-                  key={skill.name}
-                  src={skill.src}
-                  alt=""
-                  width={144}
-                  height={144}
-                  className={`absolute object-contain opacity-35 blur-[0.2px] saturate-125 ${className}`}
-                />
-              ))}
-            </div>
+            {isSectionVisible && idleCardRect ? (
+              <SkillFreefallCanvas cardRect={idleCardRect} images={imagesRef.current ?? []} />
+            ) : null}
 
-            <div className="relative z-10 max-w-sm border border-neutral-800 bg-[#0e0e0e]/92 p-5 text-center shadow-2xl backdrop-blur">
+            <ScrollReveal
+              ref={idleCardRef}
+              className="relative z-10 w-full max-w-sm border border-neutral-800 bg-[#0e0e0e]/92 p-5 text-center shadow-2xl backdrop-blur"
+            >
               {isRoundComplete ? (
                 <p className="mb-3 font-mono text-sm font-bold uppercase tracking-[0.28em] text-[#e64a3b]">
                   Final score: {score}/{SKILL_BALLS.length}
@@ -670,7 +869,7 @@ export const SkillSlashGame = () => {
               >
                 {isRoundComplete ? "Play Again" : "Start Game"}
               </button>
-            </div>
+            </ScrollReveal>
           </div>
         ) : null}
 

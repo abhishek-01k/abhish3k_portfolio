@@ -2,6 +2,12 @@
 
 import { useState } from "react"
 
+import {
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
+} from "@/src/components/scroll-reveal"
+
 const CONTACT_EMAIL = "abhishekkumar214567@gmail.com"
 
 export const ContactSection = () => {
@@ -23,7 +29,7 @@ export const ContactSection = () => {
       <div className="mx-auto max-w-6xl">
 
         {/* Header */}
-        <div className="px-8 pt-8 pb-6 border-b border-neutral-800">
+        <ScrollReveal className="px-8 pt-8 pb-6 border-b border-neutral-800">
           <span className="text-[10px] font-bold tracking-[0.35em] text-[#e64a3b] uppercase border border-[#e64a3b] px-2 py-0.5">
             {"// Contact"}
           </span>
@@ -44,13 +50,13 @@ export const ContactSection = () => {
             </a>
             .
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Body */}
-        <div className="grid grid-cols-1 lg:grid-cols-2">
+        <ScrollStagger className="grid grid-cols-1 lg:grid-cols-2">
 
           {/* Form */}
-          <div className="border-b lg:border-b-0 lg:border-r border-neutral-800 px-8 py-8">
+          <ScrollStaggerItem className="border-b lg:border-b-0 lg:border-r border-neutral-800 px-8 py-8">
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               <Field
                 label="Name"
@@ -88,10 +94,10 @@ export const ContactSection = () => {
                 Send email -&gt;
               </button>
             </form>
-          </div>
+          </ScrollStaggerItem>
 
           {/* Map */}
-          <div className="px-8 py-8">
+          <ScrollStaggerItem className="px-8 py-8">
             <div className="mb-5">
               <span className="text-[9px] font-bold tracking-[0.28em] text-neutral-600 uppercase">
                 Location
@@ -102,8 +108,8 @@ export const ContactSection = () => {
               </p>
             </div>
             <RealMapCard />
-          </div>
-        </div>
+          </ScrollStaggerItem>
+        </ScrollStagger>
       </div>
     </section>
   )

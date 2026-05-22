@@ -2,6 +2,11 @@
 
 import { Code2, type LucideIcon, Mic2, PenTool, Rocket } from "lucide-react"
 
+import {
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
+} from "@/src/components/scroll-reveal"
 import { AREAS } from "@/src/config/constants"
 import { EyeTracker } from "@/src/modules/home/components/eye-tracker"
 
@@ -27,33 +32,35 @@ export const AboutSection = () => {
   return (
     <section id="about" className="w-full bg-[#0e0e0e] text-white">
       <div className="mx-auto max-w-6xl border border-t-0 border-neutral-800">
-        <div className="flex justify-end px-8 pt-8 pb-2">
+        <ScrollReveal className="flex justify-end px-8 pt-8 pb-2">
           <span className="border border-[#e64a3b] px-2 py-0.5 text-[10px] font-bold tracking-[0.35em] text-[#e64a3b] uppercase">
             {"// Who am I?"}
           </span>
-        </div>
+        </ScrollReveal>
 
-        <blockquote className="relative mx-8 mt-4 mb-8 border-y border-neutral-800 px-4 py-8 text-center">
-          <h2
-            className="mx-auto max-w-3xl leading-[1.12] font-bold tracking-tight text-white"
-            style={{ fontSize: "clamp(1.5rem, 2.8vw, 3rem)" }}
-          >
-            <span className="mr-1 align-baseline text-[#e64a3b]">&ldquo;</span>
-            {QUOTE}
-            <span className="ml-1 align-baseline text-[#e64a3b]">&rdquo;</span>
-          </h2>
-        </blockquote>
+        <ScrollReveal delay={0.08}>
+          <blockquote className="relative mx-8 mt-4 mb-8 border-y border-neutral-800 px-4 py-8 text-center">
+            <h2
+              className="mx-auto max-w-3xl leading-[1.12] font-bold tracking-tight text-white"
+              style={{ fontSize: "clamp(1.5rem, 2.8vw, 3rem)" }}
+            >
+              <span className="mr-1 align-baseline text-[#e64a3b]">&ldquo;</span>
+              {QUOTE}
+              <span className="ml-1 align-baseline text-[#e64a3b]">&rdquo;</span>
+            </h2>
+          </blockquote>
+        </ScrollReveal>
 
         <div className="flex border-t border-neutral-800">
-          <div className="hidden w-[38%] shrink-0 flex-col items-center justify-center border-r border-neutral-800 px-10 py-6 lg:flex">
+          <ScrollReveal className="hidden w-[38%] shrink-0 flex-col items-center justify-center border-r border-neutral-800 px-10 py-6 lg:flex">
             <EyeTracker />
-          </div>
+          </ScrollReveal>
 
-          <div className="grid flex-1 grid-cols-2">
+          <ScrollStagger className="grid flex-1 grid-cols-2">
             {AREAS.map(({ heading }, i) => {
               const Icon = AREA_ICONS[i]
               return (
-                <div
+                <ScrollStaggerItem
                   key={heading}
                   className={`group relative flex flex-col justify-between overflow-hidden px-8 py-10 lg:px-10 xl:px-12 ${borders[i]}`}
                 >
@@ -76,15 +83,15 @@ export const AboutSection = () => {
                       {heading}
                     </h3>
                   </div>
-                </div>
+                </ScrollStaggerItem>
               )
             })}
-          </div>
+          </ScrollStagger>
         </div>
 
-        <div className="flex items-center justify-center border-t border-neutral-800 px-8 py-14 lg:hidden">
+        <ScrollReveal className="flex items-center justify-center border-t border-neutral-800 px-8 py-14 lg:hidden">
           <EyeTracker />
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   )

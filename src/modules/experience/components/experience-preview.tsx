@@ -4,6 +4,12 @@ import Link from "next/link"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 
+import {
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
+} from "@/src/components/scroll-reveal"
+
 const ENTRIES = [
   {
     index: "01",
@@ -134,7 +140,7 @@ export const ExperiencePreview = () => {
       <div className="mx-auto max-w-6xl px-6 py-12 sm:px-8 sm:py-16 lg:px-10 lg:py-18">
 
         {/* ── Header ─────────────────────────────────────── */}
-        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+        <ScrollReveal className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div className="flex flex-col gap-3">
             <span className="self-start border border-[#e64a3b] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.35em] text-[#e64a3b]">
               {"// Experience"}
@@ -151,45 +157,47 @@ export const ExperiencePreview = () => {
             Full experience
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
-        </div>
+        </ScrollReveal>
 
         {/* ── Mobile / Tablet: native scroll-snap carousel ── */}
-        <div
+        <ScrollStagger
           className="lg:hidden -mx-6 sm:-mx-8 overflow-x-auto [&::-webkit-scrollbar]:hidden snap-x snap-mandatory scroll-pl-6 sm:scroll-pl-8"
           style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}
         >
           <div className="flex gap-4 px-6 sm:px-8">
             {ENTRIES.map((e) => (
-              <div
+              <ScrollStaggerItem
                 key={e.company}
                 className="shrink-0 snap-start w-[calc(100vw-3.5rem)] sm:w-[calc(100vw-5rem)] flex flex-col"
               >
                 <CardContent e={e} isActive />
-              </div>
+              </ScrollStaggerItem>
             ))}
           </div>
-        </div>
+        </ScrollStagger>
 
         {/* ── Desktop: JS-controlled carousel ──────────── */}
-        <div ref={desktopWrapperRef} className="hidden overflow-hidden lg:block">
-          <div
-            className="flex gap-4 transition-transform duration-500 ease-out"
-            style={{ transform: `translateX(-${offset}px)` }}
-          >
-            {ENTRIES.map((e, i) => (
-              <div
-                key={e.company}
-                className="flex min-h-[360px] w-[80%] shrink-0 flex-col transition-opacity duration-500 xl:min-h-[400px]"
-                style={{ opacity: i === activeIndex ? 1 : 0.4 }}
-              >
-                <CardContent e={e} isActive={i === activeIndex} />
-              </div>
-            ))}
+        <ScrollReveal>
+          <div ref={desktopWrapperRef} className="hidden overflow-hidden lg:block">
+            <div
+              className="flex gap-4 transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${offset}px)` }}
+            >
+              {ENTRIES.map((e, i) => (
+                <div
+                  key={e.company}
+                  className="flex min-h-[360px] w-[80%] shrink-0 flex-col transition-opacity duration-500 xl:min-h-[400px]"
+                  style={{ opacity: i === activeIndex ? 1 : 0.4 }}
+                >
+                  <CardContent e={e} isActive={i === activeIndex} />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* ── Navigation — desktop only ─────────────────── */}
-        <div className="hidden lg:flex mt-5 items-center justify-between">
+        <ScrollReveal className="hidden lg:flex mt-5 items-center justify-between" delay={0.08}>
           <div className="flex gap-2">
             <button
               type="button"
@@ -227,7 +235,7 @@ export const ExperiencePreview = () => {
               />
             ))}
           </div>
-        </div>
+        </ScrollReveal>
 
       </div>
     </section>

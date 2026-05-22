@@ -6,6 +6,11 @@ import type { CSSProperties } from "react"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { ArrowRight } from "lucide-react"
 
+import {
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
+} from "@/src/components/scroll-reveal"
 import { PROJECTS } from "@/src/config/constants"
 import { getProjectHref } from "../project-utils"
 
@@ -93,7 +98,7 @@ export const ProjectsPreview = () => {
       <div className="mx-auto max-w-6xl px-6 py-12 sm:px-8 sm:py-16 lg:px-10">
 
         {/* ── Header ────────────────────────────────────── */}
-        <div className="mb-8 flex flex-col justify-between gap-6 sm:mb-10 sm:flex-row sm:items-end lg:mb-12">
+        <ScrollReveal className="mb-8 flex flex-col justify-between gap-6 sm:mb-10 sm:flex-row sm:items-end lg:mb-12">
           <div className="flex flex-col gap-3">
             <span className="self-start border border-[#e64a3b] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.35em] text-[#e64a3b]">
               {"// Projects"}
@@ -118,7 +123,7 @@ export const ProjectsPreview = () => {
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 sm:h-4 sm:w-4" />
             </Link>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* ── Mobile grid ───────────────────────────────── */}
         <div className="md:hidden">
@@ -171,7 +176,7 @@ const ProjectRows = ({
   onPointerEnter: () => void
   onPointerLeave: () => void
 }) => (
-  <div className="space-y-4">
+  <ScrollStagger className="space-y-4">
     {rows.map((row, rowIndex) => (
       <div
         key={`${rowKeyPrefix}-row-${rowIndex}`}
@@ -179,18 +184,19 @@ const ProjectRows = ({
         style={{ "--project-row-size": row.length } as CSSProperties}
       >
         {row.map(({ project, index }) => (
-          <ProjectTile
-            key={project.title}
-            project={project}
-            index={index}
-            isDesktop={isDesktop}
-            onPointerEnter={onPointerEnter}
-            onPointerLeave={onPointerLeave}
-          />
+          <ScrollStaggerItem key={project.title} className="flex min-h-[360px] md:min-h-0">
+            <ProjectTile
+              project={project}
+              index={index}
+              isDesktop={isDesktop}
+              onPointerEnter={onPointerEnter}
+              onPointerLeave={onPointerLeave}
+            />
+          </ScrollStaggerItem>
         ))}
       </div>
     ))}
-  </div>
+  </ScrollStagger>
 )
 
 const ProjectTile = ({
@@ -226,7 +232,7 @@ const ProjectTile = ({
       onClick={handleClick}
       onPointerEnter={onPointerEnter}
       onPointerLeave={onPointerLeave}
-      className={`group relative min-h-[360px] overflow-hidden outline-none ring-1 ring-white/10 transition duration-500 hover:ring-white/30 focus-visible:ring-2 focus-visible:ring-[#e64a3b] md:min-h-0 ${
+      className={`group relative h-full min-h-[360px] flex-1 overflow-hidden outline-none ring-1 ring-white/10 transition duration-500 hover:ring-white/30 focus-visible:ring-2 focus-visible:ring-[#e64a3b] md:min-h-0 ${
         isDesktop ? "cursor-none bg-black" : "cursor-pointer bg-neutral-950"
       }`}
       aria-label={`View ${project.title}`}

@@ -21,7 +21,7 @@ const ProjectTile = ({
       href={href}
       onPointerEnter={onPointerEnter}
       onPointerLeave={onPointerLeave}
-      className="group relative overflow-hidden bg-neutral-950 outline-none ring-1 ring-white/10 transition duration-500 hover:ring-white/30 focus-visible:ring-2 focus-visible:ring-[#e64a3b] max-lg:flex max-lg:flex-col lg:block lg:min-h-0 lg:cursor-none lg:bg-black"
+      className="group relative flex h-full flex-1 overflow-hidden bg-neutral-950 outline-none ring-1 ring-white/10 transition duration-500 hover:ring-white/30 focus-visible:ring-2 focus-visible:ring-[#e64a3b] max-lg:flex-col lg:block lg:min-h-0 lg:cursor-none lg:bg-black"
       aria-label={`View ${project.title}`}
     >
       <div className="relative aspect-video w-full bg-black lg:absolute lg:inset-0 lg:aspect-auto">

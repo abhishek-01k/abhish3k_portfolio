@@ -1,21 +1,8 @@
-# Next.js template
+# Abhishek Portfolio
 
-This is a Next.js template with shadcn/ui.
+Personal portfolio for Abhishek, a software developer, AI engineer, and
+blockchain developer who designs and ships full-stack applications, AI-powered
+tools, and on-chain protocols from idea to production.
 
-## Adding components
-
-To add components to your app, run the following command:
-
-```bash
-npx shadcn@latest add button
-```
-
-This will place the ui components in the `components` directory.
-
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
-```
+The site highlights my projects, experience, skills, recommendations, and ways
+to get in touch.

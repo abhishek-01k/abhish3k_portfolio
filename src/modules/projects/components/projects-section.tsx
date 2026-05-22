@@ -3,6 +3,11 @@
 import type { CSSProperties } from "react"
 import { useEffect, useMemo, useRef, useState } from "react"
 
+import {
+  ScrollReveal,
+  ScrollStagger,
+  ScrollStaggerItem,
+} from "@/src/components/scroll-reveal"
 import { PROJECTS } from "@/src/config/constants"
 import ProjectTile from "./project-title"
 
@@ -68,7 +73,7 @@ export const ProjectsSection = () => {
       </div>
 
       <div className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
-        <div className="mb-8 flex items-end justify-between gap-6 px-1 text-white sm:mb-10 lg:mb-12">
+        <ScrollReveal className="mb-8 flex items-end justify-between gap-6 px-1 text-white sm:mb-10 lg:mb-12">
           <div className="flex flex-col gap-3">
             <span className="self-start border border-[#e64a3b] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.35em] text-[#e64a3b]">
               {"// Projects"}
@@ -83,9 +88,9 @@ export const ProjectsSection = () => {
           <span className="mb-1 hidden font-mono text-sm text-neutral-600 sm:block">
             {String(PROJECTS.length).padStart(2, "0")} projects
           </span>
-        </div>
+        </ScrollReveal>
 
-        <div className="space-y-4">
+        <ScrollStagger className="space-y-4">
           {rows.map((row, rowIndex) => (
             <div
               key={`project-row-${rowIndex}`}
@@ -93,16 +98,17 @@ export const ProjectsSection = () => {
               style={{ "--project-row-size": row.length } as CSSProperties}
             >
               {row.map((project) => (
-                <ProjectTile
-                  key={project.title}
-                  project={project}
-                  onPointerEnter={() => setIsCursorActive(true)}
-                  onPointerLeave={() => setIsCursorActive(false)}
-                />
+                <ScrollStaggerItem key={project.title} className="flex min-h-[420px] lg:min-h-0">
+                  <ProjectTile
+                    project={project}
+                    onPointerEnter={() => setIsCursorActive(true)}
+                    onPointerLeave={() => setIsCursorActive(false)}
+                  />
+                </ScrollStaggerItem>
               ))}
             </div>
           ))}
-        </div>
+        </ScrollStagger>
       </div>
     </section>
   )
