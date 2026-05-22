@@ -2,7 +2,7 @@
 
 import type { HTMLMotionProps, Variants } from "framer-motion"
 import { motion, useReducedMotion } from "framer-motion"
-import { forwardRef } from "react"
+import { forwardRef, type ReactNode } from "react"
 
 const revealVariants: Variants = {
   hidden: {
@@ -50,7 +50,8 @@ const childVariants: Variants = {
   },
 }
 
-type ScrollRevealProps = HTMLMotionProps<"div"> & {
+type ScrollRevealProps = Omit<HTMLMotionProps<"div">, "children"> & {
+  children: ReactNode
   delay?: number
 }
 
@@ -60,9 +61,9 @@ export const ScrollReveal = forwardRef<HTMLDivElement, ScrollRevealProps>(
 
   if (shouldReduceMotion) {
     return (
-      <div ref={ref} {...props}>
+      <motion.div ref={ref} {...props}>
         {children}
-      </div>
+      </motion.div>
     )
   }
 
@@ -84,13 +85,15 @@ export const ScrollReveal = forwardRef<HTMLDivElement, ScrollRevealProps>(
 
 ScrollReveal.displayName = "ScrollReveal"
 
-type ScrollStaggerProps = HTMLMotionProps<"div">
+type ScrollStaggerProps = Omit<HTMLMotionProps<"div">, "children"> & {
+  children: ReactNode
+}
 
 export const ScrollStagger = ({ children, ...props }: ScrollStaggerProps) => {
   const shouldReduceMotion = useReducedMotion()
 
   if (shouldReduceMotion) {
-    return <div {...props}>{children}</div>
+    return <motion.div {...props}>{children}</motion.div>
   }
 
   return (
@@ -106,7 +109,9 @@ export const ScrollStagger = ({ children, ...props }: ScrollStaggerProps) => {
   )
 }
 
-type ScrollStaggerItemProps = HTMLMotionProps<"div">
+type ScrollStaggerItemProps = Omit<HTMLMotionProps<"div">, "children"> & {
+  children: ReactNode
+}
 
 export const ScrollStaggerItem = ({
   children,
@@ -115,7 +120,7 @@ export const ScrollStaggerItem = ({
   const shouldReduceMotion = useReducedMotion()
 
   if (shouldReduceMotion) {
-    return <div {...props}>{children}</div>
+    return <motion.div {...props}>{children}</motion.div>
   }
 
   return (

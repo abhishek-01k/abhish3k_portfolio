@@ -343,6 +343,7 @@ export const SkillSlashGame = () => {
   const idleCardRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
   const imagesRef = useRef<(HTMLImageElement | null)[] | null>(null)
+  const [loadedImages, setLoadedImages] = useState<(HTMLImageElement | null)[]>([])
   const [idleCardRect, setIdleCardRect] = useState<DOMRect | null>(null)
   const [isSectionVisible, setIsSectionVisible] = useState(false)
   const [isStarted, setIsStarted] = useState(false)
@@ -356,6 +357,7 @@ export const SkillSlashGame = () => {
     loadSkillImages().then((images) => {
       if (!cancelled) {
         imagesRef.current = images
+        setLoadedImages(images)
       }
     })
 
@@ -383,10 +385,7 @@ export const SkillSlashGame = () => {
   }, [])
 
   useEffect(() => {
-    if (isStarted) {
-      setIdleCardRect(null)
-      return
-    }
+    if (isStarted) return
 
     const section = sectionRef.current
     const card = idleCardRef.current
@@ -841,7 +840,7 @@ export const SkillSlashGame = () => {
         {!isStarted ? (
           <div className="absolute inset-0 z-20 flex items-end justify-center bg-linear-to-t from-[#0e0e0e] via-[#0e0e0e]/78 to-transparent px-5 pb-12">
             {isSectionVisible && idleCardRect ? (
-              <SkillFreefallCanvas cardRect={idleCardRect} images={imagesRef.current ?? []} />
+              <SkillFreefallCanvas cardRect={idleCardRect} images={loadedImages} />
             ) : null}
 
             <ScrollReveal
