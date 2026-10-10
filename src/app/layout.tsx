@@ -6,7 +6,7 @@ import { Cursor } from "@/src/components/cursor"
 import { Preloader } from "@/src/components/preloader"
 import { ScrollProgress } from "@/src/components/scroll-progress"
 import { SITE } from "@/src/config/constants"
-import { cn } from "@/src/lib/utils"
+import { cn, withBasePath } from "@/src/lib/utils"
 import { Header } from "../components/layout"
 import { SmoothScroll } from "../components/smooth-scroll"
 
@@ -19,7 +19,7 @@ const fontSerif = Instrument_Serif({
   variable: "--font-serif",
 })
 
-const siteIcon = "/Abhishek_logo.png"
+const siteIcon = withBasePath("/Abhishek_logo.png")
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),

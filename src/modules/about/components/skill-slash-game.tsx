@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 
 import { ScrollReveal } from "@/src/components/scroll-reveal"
 import { SectionLabel } from "@/src/components/section-label"
+import { withBasePath } from "@/src/lib/utils"
 
 type SkillBall = {
   name: string
@@ -141,7 +142,7 @@ const loadSkillImages = async () => {
           const img = new window.Image()
           img.onload = () => resolve(img)
           img.onerror = reject
-          img.src = skill.src
+          img.src = withBasePath(skill.src)
         })
     )
   )

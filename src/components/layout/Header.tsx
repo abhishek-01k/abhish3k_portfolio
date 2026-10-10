@@ -8,7 +8,7 @@ import { useEffect, useState } from "react"
 
 import { LocalTime } from "@/src/components/local-time"
 import { SITE } from "@/src/config/constants"
-import { cn } from "@/src/lib/utils"
+import { cn, withBasePath } from "@/src/lib/utils"
 
 const NAV = [
   { label: "Work", id: "work" },
@@ -70,7 +70,7 @@ const Header = () => {
     }
   }, [open])
 
-  const hrefFor = (id: string) => (isHome ? `#${id}` : `/#${id}`)
+  const hrefFor = (id: string) => (isHome ? `#${id}` : withBasePath(`/#${id}`))
 
   return (
     <>

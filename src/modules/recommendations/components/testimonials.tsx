@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 
 import { SectionLabel } from "@/src/components/section-label"
 import { RECOMMENDATIONS } from "@/src/config/constants"
-import { cn } from "@/src/lib/utils"
+import { cn, withBasePath } from "@/src/lib/utils"
 
 const INTERVAL = 9000
 const EASE = [0.16, 1, 0.3, 1] as const
@@ -100,7 +100,7 @@ export const Testimonials = () => {
               >
                 <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border border-line-strong">
                   <Image
-                    src={r.photo}
+                    src={withBasePath(r.photo)}
                     alt=""
                     fill
                     sizes="48px"

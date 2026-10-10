@@ -3,6 +3,8 @@ import type { MetadataRoute } from "next"
 import { PROJECTS, SITE } from "@/src/config/constants"
 import { getProjectHref } from "@/src/modules/projects/project-utils"
 
+export const dynamic = "force-static"
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
   return [

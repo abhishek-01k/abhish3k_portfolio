@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { useEffect, useRef } from "react"
 
-import { cn } from "@/src/lib/utils"
+import { cn, withBasePath } from "@/src/lib/utils"
 import type { Project } from "../project-utils"
 
 const isVideoSrc = (src: string) => /\.(mov|mp4|webm)$/i.test(src)
@@ -28,7 +28,7 @@ export const ProjectMedia = ({
   controls?: boolean
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const src = project.image
+  const src = project.image ? withBasePath(project.image) : ""
 
   useEffect(() => {
     const video = videoRef.current
