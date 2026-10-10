@@ -11,7 +11,7 @@ export const SITE = {
   timezone: "Asia/Kolkata",
   email: "abhishekkumar214567@gmail.com",
   resume:
-    "https://drive.google.com/file/d/1bMG9fpr_DWppDePD5Yc1nWhrC7WUy_t7/view?usp=sharing",
+    "https://drive.google.com/file/d/1VuuiI9OtqhsbsvS98BPTulCK1tmI4kWL/view?usp=sharing",
   socials: [
     { label: "GitHub", href: "https://github.com/abhishek-01k" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/abhishek-01k/" },
