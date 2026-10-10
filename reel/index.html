@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>abhish3k — reel</title>
+<style>
+  @font-face { font-family: "Anton"; src: url("node_modules/@fontsource/anton/files/anton-latin-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Instrument Serif"; font-style: italic; src: url("node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2") format("woff2"); }
+  @font-face { font-family: "Instrument Serif"; font-style: normal; src: url("node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-weight: 400; src: url("node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-weight: 600; src: url("node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-weight: 800; src: url("node_modules/@fontsource/inter/files/inter-latin-800-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Caveat"; src: url("node_modules/@fontsource/caveat/files/caveat-latin-500-normal.woff2") format("woff2"); }
+  @font-face { font-family: "JetBrains Mono"; src: url("node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2") format("woff2"); }
+
+  :root {
+    --ink: #111;
+    --paper: #f5f3ee;
+    --grid: rgba(20, 30, 40, 0.16);
+    --yellow: #f7d33b;
+    --red: #e0463b;
+    --blue: #2b5fb4;
+    --lime: #c8ff3d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+  body { width: 1080px; height: 1920px; overflow: hidden; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); font-family: "Inter", sans-serif; }
+  .scene { position: absolute; inset: 0; overflow: hidden; visibility: hidden; }
+  .cam { position: absolute; inset: 0; transform-origin: 50% 50%; }
+  .abs { position: absolute; }
+
+  .grid-paper {
+    background-color: #fbfbf9;
+    background-image:
+      linear-gradient(var(--grid) 2px, transparent 2px),
+      linear-gradient(90deg, var(--grid) 2px, transparent 2px),
+      linear-gradient(rgba(20,30,40,.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(20,30,40,.07) 1px, transparent 1px);
+    background-size: 120px 120px, 120px 120px, 30px 30px, 30px 30px;
+  }
+
+  /* sticker look: white outline + soft drop shadow */
+  .sticker { filter: drop-shadow(0 0 0 #fff) drop-shadow(6px 10px 10px rgba(0,0,0,.22)); }
+  .label {
+    position: absolute; display: inline-block; white-space: nowrap; line-height: .9;
+    font-family: "Anton", sans-serif; text-transform: uppercase; letter-spacing: .5px;
+    padding: 10px 22px 8px; border: 7px solid #fff;
+    box-shadow: 8px 12px 18px rgba(0,0,0,.25);
+  }
+
+  /* ── Scene 1: room ─────────────────────────── */
+  #s1 .wall { position: absolute; left: 0; right: 0; top: 0; height: 1340px; }
+  #s1 .floor-wrap { position: absolute; left: -400px; right: -400px; bottom: -40px; height: 640px; perspective: 900px; }
+  #s1 .floor {
+    position: absolute; inset: -200px 0 0 0; transform: rotateX(62deg); transform-origin: 50% 100%;
+    background: repeating-conic-gradient(#1b1b1d 0 25%, #e9e6df 0 50%) 0 0 / 190px 190px;
+  }
+  #s1 .floor-shade { position: absolute; left: 0; right: 0; bottom: 0; height: 640px; background: linear-gradient(to bottom, rgba(0,0,0,.35), transparent 40%); }
+  .crt { left: 30px; top: 960px; width: 430px; height: 360px; background: #e9dfc6; border-radius: 34px; box-shadow: inset -14px -14px 0 #d4c7a7, 10px 14px 24px rgba(0,0,0,.25); }
+  .crt .screen { position: absolute; left: 30px; top: 34px; width: 290px; height: 240px; border-radius: 28px; background: #12302e; overflow: hidden; box-shadow: inset 0 0 40px rgba(0,0,0,.6); }
+  .crt .code { position: absolute; left: 18px; top: 0; font: 15px/24px "JetBrains Mono", monospace; color: #7dffb1; white-space: pre; }
+  .crt .code b { color: var(--yellow); font-weight: 400; }
+  .crt .code i { color: #8fb8ff; font-style: normal; }
+  .crt .scan { position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, rgba(255,255,255,.06) 0 2px, transparent 2px 5px); }
+  .crt .panel { position: absolute; right: 26px; top: 40px; width: 70px; height: 240px; background: repeating-linear-gradient(to bottom, #b9ab8a 0 6px, transparent 6px 14px); border-radius: 6px; }
+  .crt .knob { position: absolute; right: 44px; width: 34px; height: 34px; border-radius: 50%; background: #5c5240; }
+  .cabinet { left: 40px; top: 1320px; width: 410px; height: 120px; background: var(--red); border-radius: 10px; box-shadow: inset 0 -16px 0 #b8362d; }
+  .cabinet::before, .cabinet::after { content: ""; position: absolute; bottom: -70px; width: 18px; height: 70px; background: #6b3f22; transform: skewX(8deg); }
+  .cabinet::before { left: 40px; } .cabinet::after { right: 40px; transform: skewX(-8deg); }
+  .burst { left: -60px; top: 830px; width: 560px; height: 560px; }
+  .poster { left: 740px; top: 170px; width: 290px; height: 380px; background: #151515; color: #fff; padding: 28px; transform: rotate(5deg); box-shadow: 10px 16px 26px rgba(0,0,0,.3); border: 8px solid #f1efe9; }
+  .poster h4 { font: 128px/0.86 "Anton", sans-serif; letter-spacing: 1px; }
+  .poster h4 span { color: var(--lime); }
+  .poster p { margin-top: 18px; font: 18px "JetBrains Mono", monospace; color: #9a9a9a; }
+  .rack { left: 800px; top: 760px; width: 300px; height: 760px; background: #2a2c31; border-radius: 12px; box-shadow: inset 12px 0 0 #34373d, 10px 14px 26px rgba(0,0,0,.35); padding: 34px 28px; }
+  .rack .unit { height: 74px; margin-bottom: 14px; background: #1b1d21; border-radius: 6px; position: relative; }
+  .rack .led { position: absolute; top: 30px; width: 14px; height: 14px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 12px var(--lime); }
+  .rack .slot { position: absolute; left: 90px; right: 18px; top: 30px; height: 12px; background: repeating-linear-gradient(90deg, #3a3d44 0 10px, transparent 10px 16px); }
+  #s1 .avatar { left: 190px; top: 545px; height: 1190px; }
+  .hi { left: 120px; top: 250px; font: 290px/1 "Anton", sans-serif; color: var(--yellow); letter-spacing: 4px; text-shadow: 8px 8px 0 rgba(0,0,0,.12); }
+  .hi span { display: inline-block; }
+  #s1 .im { left: 400px; top: 770px; background: var(--red); color: #fff; font-size: 96px; text-transform: none; transform: rotate(-8deg); }
+  #s1 .name { left: 430px; top: 905px; background: var(--blue); color: #fff; font-size: 136px; transform: rotate(-3deg); }
+
+  /* ── Scene 2: desk ─────────────────────────── */
+  .keyboard { left: -170px; top: -60px; width: 820px; height: 300px; background: #1d1f23; border-radius: 26px; transform: rotate(-24deg); padding: 26px; display: grid; grid-template-columns: repeat(15, 1fr); gap: 9px; box-shadow: 14px 22px 30px rgba(0,0,0,.35); }
+  .keyboard i { background: #2f3238; border-radius: 7px; box-shadow: inset 0 -5px 0 #24262b; }
+  .keyboard i.accent { background: var(--lime); box-shadow: inset 0 -5px 0 #9fcf22; }
+  .paper-sheet { background: #ece5d6; box-shadow: 10px 18px 26px rgba(0,0,0,.22); }
+  .sheet-top { left: 690px; top: -80px; width: 460px; height: 560px; transform: rotate(14deg); }
+  .note { left: 250px; top: 560px; width: 580px; height: 760px; transform: rotate(-5deg); padding: 120px 70px; }
+  .note .clip { position: absolute; left: 40px; top: -40px; width: 70px; height: 190px; }
+  .note .line1 { font: 600 64px/1.1 "Inter", sans-serif; color: #333; }
+  .note .line2 { margin-top: 10px; font: 800 132px/1 "Inter", sans-serif; letter-spacing: -4px; color: #111; }
+  .note .line3 { position: relative; margin-top: 4px; font: italic 150px/1 "Instrument Serif", serif; color: #1d3fbf; }
+  .note .scribble { position: absolute; left: -10px; bottom: -36px; width: 360px; height: 60px; }
+  .folder { left: -110px; top: 1430px; width: 560px; height: 440px; background: #c9a06a; border-radius: 16px; transform: rotate(18deg); box-shadow: 12px 18px 26px rgba(0,0,0,.3); }
+  .folder::before { content: ""; position: absolute; right: 40px; top: -38px; width: 170px; height: 60px; background: #2fa59a; border-radius: 10px 10px 0 0; }
+  .mouse { left: 780px; top: 1420px; width: 210px; height: 310px; transform: rotate(-16deg); }
+  .app { width: 190px; height: 190px; border-radius: 44px; border: 9px solid #fff; display: grid; place-items: center; box-shadow: 8px 14px 22px rgba(0,0,0,.28); font: 800 76px "Inter", sans-serif; color: #fff; }
+  .app.ts { left: 820px; top: 300px; background: #2f74c0; transform: rotate(10deg); }
+  .app.fig { left: 40px; top: 470px; background: #1e1e1e; transform: rotate(-12deg); }
+  .app.eth { left: 770px; top: 1180px; background: #6274d6; transform: rotate(-8deg); }
+  .app.ai { left: 60px; top: 1180px; background: #111; transform: rotate(9deg); color: var(--lime); }
+
+  /* ── Scene 3: yeah ─────────────────────────── */
+  .yeah { left: 0; right: 0; top: 820px; text-align: center; font: 600 170px/1 "Inter", sans-serif; letter-spacing: -6px; color: #151515; }
+  .yeah span { display: inline-block; }
+
+  /* ── Scene 4: hats ─────────────────────────── */
+  #s4 { background: #f6c42f; }
+  .waves { left: -700px; top: -400px; width: 2480px; height: 2720px; background: repeating-radial-gradient(circle at 50% 50%, #f9d65a 0 70px, #f4bd22 70px 150px); filter: url(#wobble); }
+  .years { left: 0; right: 0; top: 380px; text-align: center; font: italic 112px/1 "Instrument Serif", serif; color: #1a1a1a; }
+  #s4 .avatar { left: 205px; top: 560px; height: 1260px; }
+  .hat-set { position: absolute; left: 0; right: 0; top: 1150px; height: 380px; }
+  .hat-set .l1 { left: 110px; top: -30px; background: #fff; color: #111; font-size: 132px; transform: rotate(-6deg); }
+  .hat-set .l2 { left: 290px; top: 150px; background: #111; font-size: 118px; transform: rotate(-2deg); }
+  .hat-set .l3 { left: 600px; top: 315px; background: #fff; color: #111; font: 600 44px/1 "Inter", sans-serif; text-transform: none; padding: 8px 18px; border-width: 6px; transform: rotate(4deg); }
+
+  /* ── Fan transition ────────────────────────── */
+  #fan { position: absolute; inset: 0; pointer-events: none; visibility: hidden; }
+  .leaf { position: absolute; left: -200px; bottom: -200px; width: 3200px; height: 3200px; transform-origin: 0% 100%; background: #4d8a3b; box-shadow: 0 -18px 40px rgba(0,0,0,.35); }
+
+  /* ── Grain ─────────────────────────────────── */
+  #grain { position: absolute; inset: -60px; pointer-events: none; opacity: .09; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="wobble" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence id="wobbleNoise" type="fractalNoise" baseFrequency="0.0022" numOctaves="2" seed="7" />
+    <feDisplacementMap in="SourceGraphic" scale="260" />
+  </filter>
+</svg>
+
+<div id="stage">
+  <!-- Scene 1 — room -->
+  <section class="scene" id="s1">
+    <div class="cam">
+      <div class="wall grid-paper"></div>
+      <div class="floor-wrap"><div class="floor"></div><div class="floor-shade"></div></div>
+      <svg class="abs burst" viewBox="0 0 100 100"><polygon fill="#f7cf2f" points="50,2 60,32 92,18 72,44 98,58 66,64 76,96 50,74 24,96 34,64 2,58 28,44 8,18 40,32"/></svg>
+      <div class="abs poster"><h4>SHIP<br/>IT<span>.</span></h4><p>$ git push --prod</p></div>
+      <div class="abs rack">
+        <div class="unit"><span class="led" style="left:22px"></span><span class="led blink" style="left:50px;background:#ff5a36;box-shadow:0 0 12px #ff5a36"></span><span class="slot"></span></div>
+        <div class="unit"><span class="led blink" style="left:22px"></span><span class="led" style="left:50px"></span><span class="slot"></span></div>
+        <div class="unit"><span class="led" style="left:22px"></span><span class="led blink" style="left:50px"></span><span class="slot"></span></div>
+        <div class="unit"><span class="led blink" style="left:22px"></span><span class="led" style="left:50px"></span><span class="slot"></span></div>
+        <div class="unit"><span class="led" style="left:22px"></span><span class="led blink" style="left:50px"></span><span class="slot"></span></div>
+        <div class="unit"><span class="led blink" style="left:22px"></span><span class="led" style="left:50px"></span><span class="slot"></span></div>
+        <div class="unit"><span class="led" style="left:22px"></span><span class="led blink" style="left:50px"></span><span class="slot"></span></div>
+        <div class="unit"><span class="led blink" style="left:22px"></span><span class="led" style="left:50px"></span><span class="slot"></span></div>
+      </div>
+      <div class="abs cabinet"></div>
+      <div class="abs crt">
+        <div class="screen">
+          <div class="code" id="crtCode"></div>
+          <div class="scan"></div>
+        </div>
+        <div class="panel"></div>
+        <div class="knob" style="top:280px"></div>
+      </div>
+      <img class="abs avatar" src="assets/avatar-standing.webp" alt="" />
+      <div class="abs hi" id="hi"><span>H</span><span>i</span><span>.</span><span>.</span></div>
+      <div class="label im" id="im">I'm</div>
+      <div class="label name" id="name">ABHISHEK</div>
+    </div>
+  </section>
+
+  <!-- Scene 2 — desk -->
+  <section class="scene grid-paper" id="s2">
+    <div class="cam">
+      <div class="abs keyboard" id="kb"></div>
+      <div class="abs paper-sheet sheet-top" id="sheetTop"></div>
+      <div class="abs folder" id="folder"></div>
+      <svg class="abs mouse" id="mouse" viewBox="0 0 210 310">
+        <defs><radialGradient id="mg" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#4a4d55"/><stop offset="1" stop-color="#0f1013"/></radialGradient></defs>
+        <rect x="10" y="10" width="190" height="290" rx="95" fill="url(#mg)"/>
+        <line x1="105" y1="20" x2="105" y2="120" stroke="#000" stroke-width="5"/>
+        <rect x="95" y="50" width="20" height="44" rx="10" fill="#c8ff3d"/>
+      </svg>
+      <div class="abs app ts" id="appTs">TS</div>
+      <div class="abs app fig" id="appFig">
+        <svg width="90" height="130" viewBox="0 0 90 130"><circle cx="25" cy="22" r="20" fill="#f24e1e"/><circle cx="65" cy="22" r="20" fill="#ff7262"/><circle cx="25" cy="64" r="20" fill="#a259ff"/><circle cx="65" cy="64" r="20" fill="#1abcfe"/><circle cx="25" cy="106" r="20" fill="#0acf83"/></svg>
+      </div>
+      <div class="abs app eth" id="appEth">
+        <svg width="80" height="130" viewBox="0 0 80 130"><polygon points="40,0 80,65 40,88 0,65" fill="#fff"/><polygon points="40,96 80,72 40,130 0,72" fill="#dfe4ff"/></svg>
+      </div>
+      <div class="abs app ai" id="appAi">AI</div>
+      <div class="abs paper-sheet note" id="note">
+        <svg class="clip" viewBox="0 0 70 190"><path d="M20 180 V30 a15 15 0 0 1 30 0 V150 a8 8 0 0 1 -16 0 V50" fill="none" stroke="#8d939b" stroke-width="8" stroke-linecap="round"/></svg>
+        <div class="line1" id="n1"></div>
+        <div class="line2" id="n2">things</div>
+        <div class="line3" id="n3"><span id="n3t"></span>
+          <svg class="scribble" viewBox="0 0 360 60"><path id="scrib" d="M6 40 C 80 10, 160 54, 230 26 S 330 30, 352 18" fill="none" stroke="#1d3fbf" stroke-width="9" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scene 3 — yeah -->
+  <section class="scene grid-paper" id="s3">
+    <div class="cam"><div class="abs yeah" id="yeah"><span>Y</span><span>e</span><span>a</span><span>h</span><span>.</span><span>.</span></div></div>
+  </section>
+
+  <!-- Scene 4 — hats -->
+  <section class="scene" id="s4">
+    <div class="cam">
+      <div class="abs waves" id="waves"></div>
+      <div class="abs years" id="years"></div>
+      <img class="abs avatar sticker" id="avatar4" src="assets/avatar-standing.webp" alt="" />
+      <div class="hat-set" id="hat0"><div class="label l1">Software</div><div class="label l2" style="color:#f7d33b">Engineer</div><div class="label l3">full-stack · web3 · AI</div></div>
+      <div class="hat-set" id="hat1"><div class="label l1">Product</div><div class="label l2" style="color:#ff6fae">Designer</div><div class="label l3">flows that just click</div></div>
+      <div class="hat-set" id="hat2"><div class="label l1">Content</div><div class="label l2" style="color:#4fd8ee">Creator</div><div class="label l3">hard ideas, plain words</div></div>
+      <div class="hat-set" id="hat3"><div class="label l1">Founder</div><div class="label l2" style="color:#c8ff3d">&amp; Builder</div><div class="label l3">zero → one</div></div>
+    </div>
+  </section>
+
+  <div id="fan"></div>
+  <div id="grain"></div>
+</div>
+
+<script src="node_modules/gsap/dist/gsap.min.js"></script>
+<script>
+  const FPS = 30
+  const $ = (s) => document.querySelector(s)
+  const $$ = (s) => [...document.querySelectorAll(s)]
+
+  /* ── Static content ───────────────────────── */
+  const CODE = [
+    "<b>const</b> abhishek = {",
+    "  role: <i>'full-stack'</i>,",
+    "  ships: <i>'daily'</i>,",
+    "  stack: [<i>'ts'</i>, <i>'sol'</i>, <i>'ai'</i>],",
+    "}",
+    "",
+    "<b>await</b> deploy(abhishek)",
+    "<i>// ✓ confirmed in 1 block</i>",
+    "",
+    "<b>function</b> ship(idea) {",
+    "  <b>return</b> build(idea)",
+    "    .then(test)",
+    "    .then(launch)",
+    "}",
+    "",
+    "<b>export default</b> ship",
+  ]
+  $("#crtCode").innerHTML = [...CODE, ...CODE].join("\n")
+  $("#kb").innerHTML = Array.from({ length: 75 }, (_, i) =>
+    `<i class="${[17, 33, 58].includes(i) ? "accent" : ""}"></i>`).join("")
+
+  /* typing helper: tween a counter and write a substring */
+  const typeOn = (el, text, dur) => {
+    const o = { n: 0 }
+    return gsap.to(o, { n: text.length, duration: dur, ease: "none",
+      onUpdate: () => { el.textContent = text.slice(0, Math.round(o.n)) } })
+  }
+  /* camera micro-shake used on every slap */
+  const shake = (cam, at) => {
+    const t = gsap.timeline()
+    t.to(cam, { x: -10, y: 6, rotation: -0.4, duration: 0.04 })
+     .to(cam, { x: 8, y: -5, rotation: 0.3, duration: 0.04 })
+     .to(cam, { x: 0, y: 0, rotation: 0, duration: 0.08 })
+    tl.add(t, at)
+  }
+  const slap = (el, at, from = {}) => {
+    tl.fromTo(el, { autoAlpha: 0, scale: 2.1, ...from }, { autoAlpha: 1, scale: 1, duration: 0.22, ease: "back.out(2.6)" }, at)
+  }
+  const show = (id, at, until) => {
+    tl.set(id, { visibility: "visible" }, at)
+    if (until != null) tl.set(id, { visibility: "hidden" }, until)
+  }
+
+  const tl = gsap.timeline({ paused: true })
+
+  /* ── Scene 1: room (0 → 3.0) ──────────────── */
+  show("#s1", 0, 3.0)
+  tl.fromTo("#s1 .cam", { scale: 1.16 }, { scale: 1.02, duration: 3.0, ease: "power2.out" }, 0)
+  tl.fromTo("#crtCode", { y: 0 }, { y: -24 * CODE.length, duration: 6, ease: "none" }, 0)
+  tl.fromTo(".burst", { rotation: 0 }, { rotation: 40, duration: 3, ease: "none" }, 0)
+  $$(".rack .blink").forEach((el, i) =>
+    tl.fromTo(el, { opacity: 1 }, { opacity: 0.15, duration: 0.18, repeat: 15, yoyo: true, ease: "steps(1)" }, i * 0.07))
+  tl.fromTo("#s1 .avatar", { y: 60, scale: 0.94, autoAlpha: 0 }, { y: 0, scale: 1, autoAlpha: 1, duration: 0.45, ease: "back.out(1.8)" }, 0.05)
+  tl.to("#s1 .avatar", { rotation: 1.2, transformOrigin: "50% 100%", duration: 1.2, yoyo: true, repeat: 1, ease: "sine.inOut" }, 0.5)
+  tl.fromTo("#hi span", { autoAlpha: 0, y: 80, scale: 0.4 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.35, stagger: 0.07, ease: "back.out(3)" }, 0.25)
+  slap("#im", 1.05, { rotation: -20 })
+  shake("#s1 .cam", 1.1)
+  slap("#name", 1.3, { rotation: 6 })
+  shake("#s1 .cam", 1.35)
+  // whip-pan out
+  tl.to("#s1 .cam", { x: -1300, filter: "blur(14px)", duration: 0.22, ease: "power3.in" }, 2.78)
+
+  /* ── Scene 2: desk (3.0 → 6.5) ────────────── */
+  show("#s2", 3.0, 6.5)
+  tl.fromTo("#s2 .cam", { x: 1300, filter: "blur(14px)" }, { x: 0, filter: "blur(0px)", duration: 0.28, ease: "power3.out" }, 3.0)
+  tl.fromTo("#s2 .cam", { scale: 1 }, { scale: 1.07, duration: 3.5, ease: "none" }, 3.0)
+  tl.from("#kb", { x: -500, y: -300, rotation: -50, duration: 0.6, ease: "power3.out" }, 3.05)
+  tl.from("#sheetTop", { x: 400, y: -300, rotation: 40, duration: 0.6, ease: "power3.out" }, 3.1)
+  tl.from("#folder", { x: -500, y: 400, rotation: 50, duration: 0.6, ease: "power3.out" }, 3.15)
+  tl.from("#mouse", { x: 400, y: 400, rotation: -50, duration: 0.6, ease: "power3.out" }, 3.2)
+  tl.from("#note", { y: 1400, rotation: 20, duration: 0.65, ease: "power3.out" }, 3.15)
+  ;["#appTs", "#appFig", "#appEth", "#appAi"].forEach((id, i) => slap(id, 3.55 + i * 0.12, { rotation: (i % 2 ? -1 : 1) * 30 }))
+  tl.add(typeOn($("#n1"), "And I make", 0.4), 3.75)
+  tl.fromTo("#n2", { autoAlpha: 0, y: 30, scale: 1.3 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.22, ease: "back.out(3)" }, 4.35)
+  tl.add(typeOn($("#n3t"), "ship.", 0.35), 4.95)
+  tl.fromTo("#scrib", { strokeDasharray: 420, strokeDashoffset: 420 }, { strokeDashoffset: 0, duration: 0.45, ease: "power2.inOut" }, 5.3)
+  tl.to("#s2 .cam", { scale: 2.4, y: 120, filter: "blur(10px)", autoAlpha: 0, duration: 0.3, ease: "power3.in" }, 6.2)
+
+  /* ── Scene 3: yeah (6.5 → 7.5) ─────────────── */
+  show("#s3", 6.5, 7.5)
+  tl.fromTo("#yeah span", { autoAlpha: 0, y: 60, rotation: -12 }, { autoAlpha: 1, y: 0, rotation: 0, duration: 0.25, stagger: 0.05, ease: "back.out(3)" }, 6.55)
+  tl.fromTo("#s3 .cam", { scale: 1.08 }, { scale: 1, duration: 1, ease: "power2.out" }, 6.5)
+  tl.to("#yeah", { rotation: -3, duration: 0.15, yoyo: true, repeat: 3, ease: "sine.inOut" }, 7.0)
+
+  /* ── Scene 4: hats (7.5 → 11.4) ────────────── */
+  show("#s4", 7.5, 11.9)
+  tl.fromTo("#waves", { rotation: 0, scale: 1 }, { rotation: 25, scale: 1.12, duration: 4.4, ease: "none" }, 7.5)
+  tl.fromTo("#s4 .cam", { scale: 1.25 }, { scale: 1, duration: 0.5, ease: "power3.out" }, 7.5)
+  tl.fromTo("#avatar4", { autoAlpha: 0, scale: 0.5, y: 120 }, { autoAlpha: 1, scale: 1, y: 0, duration: 0.45, ease: "back.out(2)" }, 7.55)
+  tl.add(typeOn($("#years"), "4 years in", 0.45), 7.7)
+  gsap.set(".hat-set .label", { autoAlpha: 0 })
+  const HAT_START = 8.25, HAT_STEP = 0.78
+  for (let i = 0; i < 4; i++) {
+    const at = HAT_START + i * HAT_STEP
+    const labels = $$(`#hat${i} .label`)
+    labels.forEach((el, j) => slap(el, at + j * 0.1, { rotation: (j % 2 ? 1 : -1) * 18 }))
+    shake("#s4 .cam", at + 0.02)
+    if (i < 3) tl.to(labels, { autoAlpha: 0, scale: 0.7, duration: 0.1, ease: "power2.in" }, at + HAT_STEP - 0.1)
+  }
+  tl.to("#avatar4", { y: -14, duration: 0.39, yoyo: true, repeat: 7, ease: "sine.inOut" }, HAT_START)
+
+  /* ── Paper-fan transition (11.3 → 12.2) ────── */
+  const fan = $("#fan")
+  const LEAVES = 7
+  for (let i = 0; i < LEAVES; i++) {
+    const leaf = document.createElement("div")
+    leaf.className = "leaf"
+    leaf.style.background = i % 2 ? "#4d8a3b" : "#447d34"
+    fan.appendChild(leaf)
+  }
+  show("#fan", 11.3)
+  tl.fromTo(".leaf", { rotation: -95 }, { rotation: (i) => -48 + i * 8, duration: 0.55, stagger: 0.06, ease: "power3.out" }, 11.3)
+  tl.to("#stage", { backgroundColor: "#447d34", duration: 0.01 }, 11.9)
+  tl.to({}, { duration: 0.3 }, 12.0) // hold
+
+  /* grain jitter */
+  tl.to("#grain", { x: 30, y: -20, duration: 0.1, repeat: Math.ceil(tl.duration() / 0.1), yoyo: true, ease: "steps(1)" }, 0)
+
+  window.__DURATION = tl.duration()
+  window.__FPS = FPS
+  window.__seek = (t) => { tl.seek(t, false) }
+  window.__ready = document.fonts.ready.then(() =>
+    Promise.all([...document.images].map((img) => img.decode().catch(() => {}))))
+
+  // Live preview when opened normally (?play)
+  if (location.search.includes("play")) window.__ready.then(() => tl.play(0))
+</script>
+</body>
+</html>

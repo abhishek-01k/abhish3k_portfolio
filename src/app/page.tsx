@@ -1,40 +1,25 @@
-import AboutPage from "@/src/modules/about/about-page"
+import { Manifesto } from "@/src/modules/about/components/manifesto"
 import { SkillSlashGame } from "@/src/modules/about/components/skill-slash-game"
-import ContactPage from "@/src/modules/contact/contact-page"
-import ExperiencePage from "@/src/modules/experience/experience-page"
+import { ContactCta } from "@/src/modules/contact/components/contact-cta"
+import { Changelog } from "@/src/modules/experience/components/changelog"
 import { FooterSection } from "@/src/modules/footer/footer-section"
 import HomePage from "@/src/modules/home/home-page"
-import ProjectsPage from "@/src/modules/projects/projects-page"
-import RecommendationsPage from "@/src/modules/recommendations/recommendations-page"
-import { ScrollReveal } from "@/src/components/scroll-reveal"
+import { WorkSection } from "@/src/modules/projects/components/work-section"
+import { Testimonials } from "@/src/modules/recommendations/components/testimonials"
+import { WinsWall } from "@/src/modules/wins/wins-wall"
 
 export default function Page() {
   return (
-    <>
-      <ScrollReveal>
-        <HomePage />
-      </ScrollReveal>
-      <ScrollReveal>
-        <AboutPage />
-      </ScrollReveal>
-      <ScrollReveal>
-        <SkillSlashGame />
-      </ScrollReveal>
-      <ScrollReveal>
-        <ProjectsPage />
-      </ScrollReveal>
-      <ScrollReveal>
-        <ExperiencePage />
-      </ScrollReveal>
-      <ScrollReveal>
-        <RecommendationsPage />
-      </ScrollReveal>
-      <ScrollReveal>
-        <ContactPage />
-      </ScrollReveal>
-      <ScrollReveal>
-        <FooterSection />
-      </ScrollReveal>
-    </>
+    <main>
+      <HomePage />
+      <WorkSection />
+      <WinsWall />
+      <Changelog />
+      <Manifesto />
+      <SkillSlashGame />
+      <Testimonials />
+      <ContactCta />
+      <FooterSection />
+    </main>
   )
 }

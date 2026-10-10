@@ -1,180 +1,249 @@
 "use client"
 
-import { ArrowUp, Menu, X } from "lucide-react"
-import Image from "next/image"
+import { AnimatePresence, motion } from "framer-motion"
+import { ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
-import { Button } from "@/src/components/ui/button"
-import { GlitchButton } from "@/src/components/ui/glitch-button"
-import { cn } from "@/src/lib/utils"
+import { LocalTime } from "@/src/components/local-time"
+import { SITE } from "@/src/config/constants"
+import { cn, withBasePath } from "@/src/lib/utils"
 
-const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
-  { label: "Contact", href: "#contact" },
+const NAV = [
+  { label: "Work", id: "work" },
+  { label: "Wins", id: "wins" },
+  { label: "Experience", id: "experience" },
+  { label: "About", id: "about" },
+  { label: "Contact", id: "contact" },
 ]
 
-const resumeLink =
-  "https://drive.google.com/file/d/1bMG9fpr_DWppDePD5Yc1nWhrC7WUy_t7/view?usp=sharing"
-const HEADER_H = "top-16 sm:top-20"
+const EASE = [0.76, 0, 0.24, 1] as const
+
+const useActiveSection = (enabled: boolean) => {
+  const [active, setActive] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!enabled) return
+    const els = NAV.map(({ id }) => document.getElementById(id)).filter(
+      (el): el is HTMLElement => Boolean(el)
+    )
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActive(entry.target.id)
+        }
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    )
+    els.forEach((el) => io.observe(el))
+    return () => io.disconnect()
+  }, [enabled])
+
+  return active
+}
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [hasScrolledPastIntro, setHasScrolledPastIntro] = useState(false)
   const pathname = usePathname()
+  const isHome = pathname === "/"
+  const active = useActiveSection(isHome)
+  const [open, setOpen] = useState(false)
+  const [hidden, setHidden] = useState(false)
 
+  // Tuck the bar away while scrolling down; bring it back on scroll up.
   useEffect(() => {
+    let lastY = window.scrollY
     const onScroll = () => {
-      const hero = document.querySelector<HTMLElement>("[data-home-hero]")
-      const hideAt = hero
-        ? Math.max(hero.offsetTop + hero.offsetHeight - 120, 0)
-        : 120
-
-      setHasScrolledPastIntro(window.scrollY > hideAt)
+      const y = window.scrollY
+      setHidden(y > 240 && y > lastY + 4)
+      if (y < lastY - 4 || y < 240) setHidden(false)
+      lastY = y
     }
-
-    onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
-    window.addEventListener("resize", onScroll)
-
-    return () => {
-      window.removeEventListener("scroll", onScroll)
-      window.removeEventListener("resize", onScroll)
-    }
-  }, [pathname])
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : ""
-    return () => { document.body.style.overflow = "" }
-  }, [isOpen])
+    document.documentElement.style.overflow = open ? "hidden" : ""
+    return () => {
+      document.documentElement.style.overflow = ""
+    }
+  }, [open])
 
-  const shouldHideHeader = hasScrolledPastIntro && !isOpen
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
-
-  const close = () => setIsOpen(false)
+  const hrefFor = (id: string) => (isHome ? `#${id}` : withBasePath(`/#${id}`))
 
   return (
     <>
-      <header
-        className={cn(
-          "sticky top-0 z-50 flex h-16 w-full items-center justify-between bg-background/80 px-4 backdrop-blur transition-all duration-700 ease-in-out sm:h-20 sm:px-6 lg:px-8",
-          shouldHideHeader
-            ? "pointer-events-none -translate-y-full opacity-0"
-            : "translate-y-0 opacity-100",
-        )}
+      <motion.header
+        initial={false}
+        animate={{ y: hidden && !open ? -110 : 0 }}
+        transition={{ duration: 0.5, ease: EASE }}
+        className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4"
       >
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-3">
+          {/* Mark */}
+          <Link
+            href="/"
+            aria-label="Abhishek — home"
+            className="group flex h-11 items-center gap-2.5 rounded-full border border-line bg-ink/70 pr-4 pl-1.5 backdrop-blur-xl"
+          >
+            <span className="grid h-8 w-8 place-items-center rounded-full bg-bone font-serif text-lg leading-none text-ink italic transition-transform duration-500 group-hover:rotate-[360deg]">
+              a
+            </span>
+            <span className="font-mono text-xs tracking-tight text-bone">
+              {SITE.handle}
+              <span className="text-signal">.xyz</span>
+            </span>
+          </Link>
 
-        <Link href="/" aria-label="Go to home" className="flex items-center gap-2">
-          <Image
-            src="/Abhishek_logo.png"
-            alt="Abhishek logo"
-            width={44}
-            height={44}
-            priority
-            className="h-10 w-auto sm:h-12"
-          />
-          <div className="flex flex-col leading-tight">
-            <p className="text-sm font-medium">Abhishek</p>
-            <p className="text-xs text-muted-foreground">Software Developer</p>
-          </div>
-        </Link>
+          {/* Desktop links */}
+          <nav
+            aria-label="Main"
+            className="hidden h-11 items-center gap-0.5 rounded-full border border-line bg-ink/70 p-1 backdrop-blur-xl lg:flex"
+          >
+            {NAV.map(({ label, id }) => {
+              const isActive = isHome && active === id
+              return (
+                <a
+                  key={id}
+                  href={hrefFor(id)}
+                  className={cn(
+                    "relative rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors duration-300",
+                    isActive ? "text-ink" : "text-bone/70 hover:text-bone"
+                  )}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className="absolute inset-0 rounded-full bg-signal"
+                      transition={{
+                        type: "spring",
+                        stiffness: 380,
+                        damping: 32,
+                      }}
+                    />
+                  )}
+                  <span className="relative">{label}</span>
+                </a>
+              )
+            })}
+          </nav>
 
-        <nav aria-label="Main navigation" className="hidden items-center gap-4 lg:flex">
-          {navLinks.map(({ label, href }) => (
-            <Button key={href} variant="ghost" asChild>
-              <a
-                href={href}
-                className="relative after:absolute after:bottom-1 after:left-2.5 after:h-px after:w-[calc(100%-1.25rem)] after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
-              >
-                {label}
-              </a>
-            </Button>
-          ))}
-          <GlitchButton href={resumeLink} target="_blank" rel="noreferrer">
-            Resume
-          </GlitchButton>
-        </nav>
-
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          className="lg:hidden"
-          aria-label={isOpen ? "Close menu" : "Open menu"}
-          aria-expanded={isOpen}
-          onClick={() => setIsOpen((v) => !v)}
-        >
-          {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </Button>
-
-      </header>
-
-      <div
-        aria-hidden
-        onClick={close}
-        className={cn(
-          "fixed inset-0 z-30 bg-black/50 backdrop-blur-sm transition-opacity duration-300 lg:hidden",
-          isOpen ? "opacity-100" : "pointer-events-none opacity-0",
-        )}
-      />
-
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label="Navigation menu"
-        className={cn(
-          "fixed inset-x-0 bottom-0 z-40 flex flex-col overflow-y-auto bg-[#101010] px-6 py-10 text-white shadow-2xl transition-transform duration-300 ease-out lg:hidden",
-          HEADER_H,
-          isOpen ? "translate-y-0" : "pointer-events-none translate-y-full",
-        )}
-      >
-        <p className="mb-10 text-2xl font-medium tracking-tight">Menu</p>
-
-        <nav aria-label="Mobile navigation" className="flex flex-col gap-6">
-          {navLinks.map(({ label, href }) => (
+          {/* Right cluster */}
+          <div className="flex items-center gap-2">
+            <span className="hidden h-11 items-center gap-2 rounded-full border border-line bg-ink/70 px-4 font-mono text-[11px] tracking-wider text-muted-ink uppercase backdrop-blur-xl xl:flex">
+              BLR <LocalTime />
+            </span>
             <a
-              key={href}
-              href={href}
-              onClick={close}
-              className="text-4xl font-light tracking-tight text-white/50 transition-colors duration-200 hover:text-white sm:text-6xl"
-            >
-              {label}
-            </a>
-          ))}
-
-          <div className="mt-6">
-            <GlitchButton
-              href={resumeLink}
+              href={SITE.resume}
               target="_blank"
               rel="noreferrer"
-              onClick={close}
+              className="group hidden h-11 items-center gap-1.5 rounded-full bg-bone px-5 text-[13px] font-semibold text-ink transition-colors hover:bg-signal sm:flex"
             >
               Resume
-            </GlitchButton>
+              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              aria-expanded={open}
+              aria-label={open ? "Close menu" : "Open menu"}
+              className="flex h-11 items-center gap-2 rounded-full border border-line bg-ink/70 px-4 text-[13px] font-medium text-bone backdrop-blur-xl lg:hidden"
+            >
+              <span className="relative block h-2.5 w-4">
+                <span
+                  className={cn(
+                    "absolute top-0 left-0 h-px w-4 bg-bone transition-transform duration-300",
+                    open && "translate-y-[5px] rotate-45"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "absolute bottom-0 left-0 h-px w-4 bg-bone transition-transform duration-300",
+                    open && "-translate-y-[4px] -rotate-45"
+                  )}
+                />
+              </span>
+              {open ? "Close" : "Menu"}
+            </button>
           </div>
-        </nav>
-      </div>
+        </div>
+      </motion.header>
 
-      <button
-        type="button"
-        aria-label="Scroll to top"
-        onClick={scrollToTop}
-        className={cn(
-          "fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full border border-border bg-background/85 text-foreground shadow-lg backdrop-blur transition-all duration-700 ease-in-out hover:-translate-y-1 hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:bottom-8 sm:right-8 sm:h-14 sm:w-14",
-          hasScrolledPastIntro
-            ? "translate-y-0 opacity-100"
-            : "pointer-events-none translate-y-5 opacity-0",
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation"
+            className="fixed inset-0 z-40 flex flex-col justify-between bg-ink px-5 pt-24 pb-8 lg:hidden"
+            initial={{ clipPath: "circle(0% at 92% 4%)" }}
+            animate={{ clipPath: "circle(150% at 92% 4%)" }}
+            exit={{ clipPath: "circle(0% at 92% 4%)" }}
+            transition={{ duration: 0.7, ease: EASE }}
+          >
+            <nav aria-label="Mobile" className="flex flex-col">
+              {NAV.map(({ label, id }, i) => (
+                <motion.a
+                  key={id}
+                  href={hrefFor(id)}
+                  onClick={() => setOpen(false)}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: 0.15 + i * 0.06,
+                    duration: 0.6,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className="group flex items-baseline justify-between border-b border-line py-4"
+                >
+                  <span className="text-5xl font-semibold tracking-tighter text-bone transition-colors group-hover:text-signal">
+                    {label}
+                  </span>
+                  <span className="font-mono text-xs text-muted-ink">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </motion.a>
+              ))}
+            </nav>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="space-y-6"
+            >
+              <a
+                href={SITE.resume}
+                target="_blank"
+                rel="noreferrer"
+                className="flex h-14 items-center justify-center gap-2 rounded-full bg-signal text-base font-semibold text-ink"
+              >
+                Download resume <ArrowUpRight className="h-4 w-4" />
+              </a>
+              <div className="flex items-center justify-between font-mono text-[11px] tracking-wider text-muted-ink uppercase">
+                <div className="flex gap-4">
+                  {SITE.socials.map((s) => (
+                    <a
+                      key={s.href}
+                      href={s.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="hover:text-bone"
+                    >
+                      {s.label}
+                    </a>
+                  ))}
+                </div>
+                <span>
+                  BLR <LocalTime />
+                </span>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
-      >
-        <ArrowUp className="h-5 w-5" />
-      </button>
+      </AnimatePresence>
     </>
   )
 }

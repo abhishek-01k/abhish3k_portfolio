@@ -1,3 +1,38 @@
+export const SITE = {
+  name: "Abhishek",
+  handle: "abhish3k",
+  url: "https://www.abhish3k.xyz",
+  title: "Abhishek — Full-stack engineer shipping AI & on-chain products",
+  description:
+    "Abhishek is a full-stack engineer at Push Chain who designs and ships AI products and on-chain protocols from zero to mainnet. 4+ years, 15+ products, 10+ hackathon wins.",
+  role: "Full-stack Engineer",
+  company: "Push Chain",
+  location: "Bangalore, IN",
+  timezone: "Asia/Kolkata",
+  email: "abhishekkumar214567@gmail.com",
+  resume:
+    "https://drive.google.com/file/d/1VuuiI9OtqhsbsvS98BPTulCK1tmI4kWL/view?usp=sharing",
+  socials: [
+    { label: "GitHub", href: "https://github.com/abhishek-01k" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/abhishek-01k/" },
+    { label: "X / Twitter", href: "https://x.com/abhish_3k" },
+  ],
+}
+
+/**
+ * Drop the finished showreel into /public (mp4 or webm) and set its path here.
+ * Until then the hero shows the "in production" reel frame.
+ */
+export const REEL_SRC: string | null = null
+
+export const STATS = [
+  { value: 4, suffix: "+", label: "Years shipping" },
+  { value: 15, suffix: "+", label: "Products launched" },
+  { value: 10, suffix: "+", label: "Hackathon wins" },
+  { value: 16, prefix: "$", suffix: "M+", label: "TVL secured" },
+  { value: 2500, suffix: "", label: "Users in 24h" },
+]
+
 export type AchievementItem = {
   id: string
   type: "card" | "polaroid" | "note" | "ticket"
@@ -19,7 +54,8 @@ export const ACHIEVEMENTS: AchievementItem[] = [
     id: "treehacks-2024",
     type: "polaroid",
     title: "1st Place — TreeHacks 2024",
-    description: "Built a cross-chain privacy mixer using ZK-SNARKs on Ethereum. Won first place out of 400+ teams across 36 hours.",
+    description:
+      "Built a cross-chain privacy mixer using ZK-SNARKs on Ethereum. Won first place out of 400+ teams across 36 hours.",
     date: "Feb 2024",
     tags: ["hackathon", "winner", "blockchain"],
     image: "https://picsum.photos/seed/treehacks/400/500",
@@ -34,7 +70,8 @@ export const ACHIEVEMENTS: AchievementItem[] = [
     id: "ethglobal-paris",
     type: "card",
     title: "ETHGlobal Paris — Top 10 Finalist",
-    description: "Shipped a gasless cross-chain messaging protocol using EIP-4337 bundlers. Selected top 10 from 1,200+ hackers.",
+    description:
+      "Shipped a gasless cross-chain messaging protocol using EIP-4337 bundlers. Selected top 10 from 1,200+ hackers.",
     date: "Jul 2023",
     tags: ["hackathon", "ethereum", "winner"],
     image: "https://picsum.photos/seed/ethparis/600/400",
@@ -49,7 +86,8 @@ export const ACHIEVEMENTS: AchievementItem[] = [
     id: "google-startups",
     type: "note",
     title: "Google for Startups — Selected",
-    description: "Omnitutor accepted into Google for Startups accelerator program. One of 12 teams selected from 3,000+ applicants globally.",
+    description:
+      "Omnitutor accepted into Google for Startups accelerator program. One of 12 teams selected from 3,000+ applicants globally.",
     date: "Apr 2023",
     tags: ["award", "startup", "AI"],
     image: "https://picsum.photos/seed/googlestartups/400/400",
@@ -62,7 +100,8 @@ export const ACHIEVEMENTS: AchievementItem[] = [
     id: "bnb-winner",
     type: "ticket",
     title: "BNB Chain Hackathon — 1st Place DeFi",
-    description: "Won the DeFi track at BNB Chain Hackathon with a yield-aggregator that auto-routes liquidity across 6 protocols.",
+    description:
+      "Won the DeFi track at BNB Chain Hackathon with a yield-aggregator that auto-routes liquidity across 6 protocols.",
     date: "Nov 2023",
     tags: ["hackathon", "winner", "defi"],
     image: "https://picsum.photos/seed/bnbchain/500/350",
@@ -76,7 +115,8 @@ export const ACHIEVEMENTS: AchievementItem[] = [
     id: "omnitutor-launch",
     type: "card",
     title: "Omnitutor — 2,500 Users in 24 h",
-    description: "Launched the Omnitutor beta and hit 2,500 signups within 24 hours with zero paid acquisition. Backed by Tavastra VC.",
+    description:
+      "Launched the Omnitutor beta and hit 2,500 signups within 24 hours with zero paid acquisition. Backed by Tavastra VC.",
     date: "Jan 2023",
     tags: ["project", "milestone", "AI"],
     image: "https://picsum.photos/seed/omnitutor/600/450",
@@ -91,7 +131,8 @@ export const ACHIEVEMENTS: AchievementItem[] = [
     id: "encode-best",
     type: "polaroid",
     title: "Encode Club — Best Web3 Project",
-    description: "Awarded Best Web3 Project at Encode Club Hackathon for a decentralised identity layer built on Push Protocol.",
+    description:
+      "Awarded Best Web3 Project at Encode Club Hackathon for a decentralised identity layer built on Push Protocol.",
     date: "Aug 2023",
     tags: ["hackathon", "winner", "web3"],
     image: "https://picsum.photos/seed/encode/380/480",
@@ -105,7 +146,8 @@ export const ACHIEVEMENTS: AchievementItem[] = [
     id: "push-tvl",
     type: "ticket",
     title: "Push Protocol — $16M TVL Milestone",
-    description: "Led engineering for the yield-farming product that crossed $16M in total value locked. Integrated 8 EVM chains.",
+    description:
+      "Led engineering for the yield-farming product that crossed $16M in total value locked. Integrated 8 EVM chains.",
     date: "Oct 2024",
     tags: ["project", "milestone", "defi"],
     image: "https://picsum.photos/seed/pushtvl/520/360",
@@ -118,7 +160,8 @@ export const ACHIEVEMENTS: AchievementItem[] = [
     id: "tavastra-vc",
     type: "note",
     title: "Tavastra VC — Seed Funding",
-    description: "Omnitutor secured seed investment from Tavastra VC. First cheque into an AI-native adaptive learning product.",
+    description:
+      "Omnitutor secured seed investment from Tavastra VC. First cheque into an AI-native adaptive learning product.",
     date: "Mar 2023",
     tags: ["award", "funding", "startup"],
     image: "https://picsum.photos/seed/tavastra/400/400",
@@ -132,7 +175,8 @@ export const ACHIEVEMENTS: AchievementItem[] = [
     id: "ethglobal-ny",
     type: "polaroid",
     title: "ETHGlobal New York — 2nd Place",
-    description: "Built a real-time on-chain gaming engine with state channels and instant finality. 2nd place out of 800+ hackers.",
+    description:
+      "Built a real-time on-chain gaming engine with state channels and instant finality. 2nd place out of 800+ hackers.",
     date: "Sep 2023",
     tags: ["hackathon", "winner", "ethereum"],
     image: "https://picsum.photos/seed/ethny/400/500",
@@ -146,7 +190,8 @@ export const ACHIEVEMENTS: AchievementItem[] = [
     id: "push-sdk-200",
     type: "card",
     title: "Push SDK — 200+ Integrations",
-    description: "The Push Notification SDK I shipped passed 200 live dApp integrations. Became the de-facto notification standard in web3.",
+    description:
+      "The Push Notification SDK I shipped passed 200 live dApp integrations. Became the de-facto notification standard in web3.",
     date: "Dec 2024",
     tags: ["project", "milestone", "open-source"],
     image: "https://picsum.photos/seed/pushsdk/560/380",
@@ -176,7 +221,8 @@ export const PROJECTS = [
       "Built a multi-wallet connection layer that unified on-chain identity across heterogeneous chains so users could interact seamlessly regardless of their wallet setup.",
       "Architected the YieldFarming V2 engine to handle $16M+ TVL at a sustained 15% APY without downtime or position loss during contract upgrades.",
     ],
-    github: "https://github.com/pushchain/push-chain-internal-ramenfi-deployment",
+    github:
+      "https://github.com/pushchain/push-chain-internal-ramenfi-deployment",
     live: "https://www.ramenfi.xyz/",
     image: "/projects/Ramenfi_demo.mp4",
     category: "DeFi",
@@ -197,7 +243,7 @@ export const PROJECTS = [
       "Built a cold-start onboarding flow that collects enough signal in under two minutes to meaningfully personalize the first learning session with no prior user data.",
       "Scaled the inference and retrieval backend to absorb a 2,500-user spike on day one without degrading response latency or retrieval quality.",
     ],
-    github: "https://github.com/abhish3k",
+    github: "https://github.com/abhishek-01k",
     live: "https://omnitutor.live/",
     image: "/projects/omnitutor_demo_2.mp4",
     category: "AI Product",
@@ -218,7 +264,7 @@ export const PROJECTS = [
       "Built cross-chain account abstraction so one Push Chain identity grants access to multiple ecosystem apps without extra wallet setup.",
       "Implemented a real-time transaction status layer with streaming feedback so users always know exactly where their on-chain operation stands.",
     ],
-    github: "https://github.com/abhish3k",
+    github: "https://github.com/abhishek-01k",
     live: "https://wallet.push.org/",
     image: "/projects/push_wallet.png",
     category: "Web3",
@@ -239,7 +285,7 @@ export const PROJECTS = [
       "Ensured reliable fund delivery under concurrent claim spikes during major ecosystem launch events with no failed transactions or stuck queues.",
       "Added wallet address validation at the claim boundary to prevent invalid or misconfigured addresses from silently consuming faucet reserves.",
     ],
-    github: "https://github.com/abhish3k",
+    github: "https://github.com/abhishek-01k",
     live: "https://faucet.push.org/",
     image: "/projects/Push_Faucet.png",
     category: "Web3",
@@ -260,7 +306,7 @@ export const PROJECTS = [
       "Architected support for Uni-V2 LP tokens alongside native PUSH staking in a single unified interface without fragmenting the user experience.",
       "Kept $16M+ TVL secure at a sustained 15% APY across the upgrade window with no smart contract downtime or loss of user funds.",
     ],
-    github: "https://github.com/abhish3k",
+    github: "https://github.com/abhishek-01k",
     live: "https://app.push.org/yield",
     image: "/projects/Push_Yield_farming.png",
     category: "DeFi",
@@ -298,7 +344,7 @@ export const PROJECTS = [
       "Helps users discover and open products from social contexts.",
     ],
     tags: ["React", "TypeScript", "Farcaster", "Commerce"],
-    github: "https://github.com/abhish3k",
+    github: "https://github.com/abhishek-01k",
     live: "https://www.farfield.shop/",
     image: "/projects/Farfield_logo.png",
     category: "Social Commerce",
@@ -323,9 +369,9 @@ export const PROJECTS = [
       "Connects users and assets across ecosystems.",
     ],
     tags: ["React Native", "TypeScript", "Web3", "Push Chain", "dApp"],
-    github: "https://github.com/abhish3k",
+    github: "https://github.com/abhishek-01k/create-push-universal-app",
     live: "https://www.npmjs.com/package/create-push-universal-app",
-    image: "https://picsum.photos/seed/push-chain-rewards/1200/900",
+    image: "",
     category: "Developer Tools",
   },
 ]
@@ -365,7 +411,6 @@ export const RECOMMENDATIONS = [
     linkedin: "https://www.linkedin.com/in/ramesh-upadhaya/",
   },
 ]
-
 
 export const TIMELINE = [
   {
@@ -448,20 +493,20 @@ export const TIMELINE = [
 ]
 
 export const AREAS = [
-    {
-      heading: "Software Engineer",
-      body: "Building scalable products across web3, AI, and consumer apps. I focus on reliable systems, crisp interfaces, and fast shipping.",
-    },
-    {
-      heading: "Product Designer",
-      body: "Designing clear user flows, interfaces, and product stories. I turn rough ideas into usable experiences that feel intentional.",
-    },
-    {
-      heading: "Content Creator",
-      body: "Explaining complex ideas through simple technical content. I write, demo, and teach so builders can understand faster.",
-    },
-    {
-      heading: "Founder",
-      body: "Starting and building early-stage products from zero. I care about sharp positioning, quick validation, and durable momentum.",
-    },
-  ]
+  {
+    heading: "Software Engineer",
+    body: "Building scalable products across web3, AI, and consumer apps. I focus on reliable systems, crisp interfaces, and fast shipping.",
+  },
+  {
+    heading: "Product Designer",
+    body: "Designing clear user flows, interfaces, and product stories. I turn rough ideas into usable experiences that feel intentional.",
+  },
+  {
+    heading: "Content Creator",
+    body: "Explaining complex ideas through simple technical content. I write, demo, and teach so builders can understand faster.",
+  },
+  {
+    heading: "Founder",
+    body: "Starting and building early-stage products from zero. I care about sharp positioning, quick validation, and durable momentum.",
+  },
+]
