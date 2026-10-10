@@ -1,16 +1,17 @@
-import { ExperienceTimeline } from "@/src/modules/experience/components/experience-timeline"
-import { Footer } from "@/src/modules/footer/footer"
+import { Changelog } from "@/src/modules/experience/components/changelog"
+import { FooterSection } from "@/src/modules/footer/footer-section"
 
 export const metadata = {
-  title: "Experience — Abhishek",
-  description: "Full work history and detailed experience.",
+  title: "Experience",
+  description:
+    "Abhishek's full work history — from BlockPay to four years building at Push Chain.",
 }
 
 export default function ExperienceRoutePage() {
   return (
-    <main>
-      <ExperienceTimeline />
-      <Footer />
+    <main className="pt-16">
+      <Changelog />
+      <FooterSection />
     </main>
   )
 }

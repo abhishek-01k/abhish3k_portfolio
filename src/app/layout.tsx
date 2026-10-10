@@ -1,41 +1,79 @@
-import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import type { Metadata, Viewport } from "next"
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google"
 
 import "./globals.css"
-import { cn } from "@/src/lib/utils";
-import { Header } from "../components/layout";
-import { SmoothScroll } from "../components/smooth-scroll";
+import { Cursor } from "@/src/components/cursor"
+import { Preloader } from "@/src/components/preloader"
+import { ScrollProgress } from "@/src/components/scroll-progress"
+import { SITE } from "@/src/config/constants"
+import { cn } from "@/src/lib/utils"
+import { Header } from "../components/layout"
+import { SmoothScroll } from "../components/smooth-scroll"
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'})
-
-const fontMono = Geist_Mono({
+const fontSans = Geist({ subsets: ["latin"], variable: "--font-sans" })
+const fontMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
+const fontSerif = Instrument_Serif({
   subsets: ["latin"],
-  variable: "--font-mono",
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-serif",
 })
 
-const siteLogo = "/Abhishek_logo.png"
 const siteIcon = "/Abhishek_logo.png"
 
 export const metadata: Metadata = {
-  title: "Abhishek",
-  applicationName: "Abhishek",
-  description: "Abhishek",
-  icons: {
-    icon: siteIcon,
-    shortcut: siteIcon,
-    apple: siteIcon,
+  metadataBase: new URL(SITE.url),
+  title: {
+    default: SITE.title,
+    template: `%s — ${SITE.name}`,
   },
+  applicationName: SITE.name,
+  description: SITE.description,
+  authors: [{ name: SITE.name, url: SITE.url }],
+  keywords: [
+    "Abhishek",
+    "abhish3k",
+    "full-stack engineer",
+    "web3 developer",
+    "AI engineer",
+    "Push Chain",
+    "portfolio",
+    "Bangalore",
+  ],
+  icons: { icon: siteIcon, shortcut: siteIcon, apple: siteIcon },
   openGraph: {
-    title: "Abhishek",
-    description: "Abhishek",
-    images: [siteLogo],
+    type: "website",
+    url: SITE.url,
+    siteName: SITE.name,
+    title: SITE.title,
+    description: SITE.description,
   },
   twitter: {
-    card: "summary",
-    title: "Abhishek",
-    description: "Abhishek",
-    images: [siteLogo],
+    card: "summary_large_image",
+    creator: "@abhish_3k",
+    title: SITE.title,
+    description: SITE.description,
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: "#0a0a0b",
+  colorScheme: "dark",
+}
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE.name,
+  url: SITE.url,
+  jobTitle: SITE.role,
+  worksFor: { "@type": "Organization", name: SITE.company },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Bangalore",
+    addressCountry: "IN",
+  },
+  sameAs: SITE.socials.map((s) => s.href),
 }
 
 export default function RootLayout({
@@ -47,13 +85,26 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", geist.variable)}
+      className={cn(
+        "antialiased",
+        fontSans.variable,
+        fontMono.variable,
+        fontSerif.variable
+      )}
     >
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
+        <Preloader />
+        <ScrollProgress />
         <SmoothScroll>
           <Header />
           {children}
         </SmoothScroll>
+        <Cursor />
+        <div className="grain" aria-hidden />
       </body>
     </html>
   )

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 
 import { ScrollReveal } from "@/src/components/scroll-reveal"
+import { SectionLabel } from "@/src/components/section-label"
 
 type SkillBall = {
   name: string
@@ -85,7 +86,8 @@ const ROUND_DURATION_MS = 15_000
 const SPAWN_START_DELAY_MS = 350
 const SPAWN_END_PADDING_MS = 2_200
 const SPAWN_INTERVAL_MS =
-  (ROUND_DURATION_MS - SPAWN_START_DELAY_MS - SPAWN_END_PADDING_MS) / SKILL_BALLS.length
+  (ROUND_DURATION_MS - SPAWN_START_DELAY_MS - SPAWN_END_PADDING_MS) /
+  SKILL_BALLS.length
 
 const getSkillRadius = (width: number) => {
   if (width >= 1024) return 72
@@ -121,7 +123,10 @@ const distanceToSegment = (
     return Math.hypot(px - ax, py - ay)
   }
 
-  const t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / lengthSquared))
+  const t = Math.max(
+    0,
+    Math.min(1, ((px - ax) * dx + (py - ay) * dy) / lengthSquared)
+  )
   const closestX = ax + t * dx
   const closestY = ay + t * dy
 
@@ -141,7 +146,9 @@ const loadSkillImages = async () => {
     )
   )
 
-  return results.map((result) => (result.status === "fulfilled" ? result.value : null))
+  return results.map((result) =>
+    result.status === "fulfilled" ? result.value : null
+  )
 }
 
 const drawSkillBall = (
@@ -177,7 +184,12 @@ const drawSlicePiece = (
   ctx.translate(piece.x, piece.y)
   ctx.rotate(piece.angle)
   ctx.beginPath()
-  ctx.rect(piece.side === -1 ? -piece.radius : 0, -piece.radius, piece.radius, piece.radius * 2)
+  ctx.rect(
+    piece.side === -1 ? -piece.radius : 0,
+    -piece.radius,
+    piece.radius,
+    piece.radius * 2
+  )
   ctx.clip()
   ctx.translate(-piece.x, -piece.y)
   drawSkillBall(ctx, img, piece)
@@ -196,7 +208,10 @@ type SkillFreefallCanvasProps = {
   images: (HTMLImageElement | null)[]
 }
 
-const SkillFreefallCanvas = ({ cardRect, images }: SkillFreefallCanvasProps) => {
+const SkillFreefallCanvas = ({
+  cardRect,
+  images,
+}: SkillFreefallCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -209,7 +224,9 @@ const SkillFreefallCanvas = ({ cardRect, images }: SkillFreefallCanvasProps) => 
     const run = async () => {
       const [Matter, freefallImages] = await Promise.all([
         import("matter-js").then((module) => module.default),
-        images.length === SKILL_BALLS.length ? Promise.resolve(images) : loadSkillImages(),
+        images.length === SKILL_BALLS.length
+          ? Promise.resolve(images)
+          : loadSkillImages(),
       ])
       if (cancelled || !containerRef.current) return
 
@@ -222,7 +239,8 @@ const SkillFreefallCanvas = ({ cardRect, images }: SkillFreefallCanvasProps) => 
       const runner = Runner.create()
       const canvas = document.createElement("canvas")
 
-      canvas.style.cssText = "position:absolute;inset:0;width:100%;height:100%;display:block;"
+      canvas.style.cssText =
+        "position:absolute;inset:0;width:100%;height:100%;display:block;"
       container.appendChild(canvas)
 
       const render = Render.create({
@@ -273,11 +291,15 @@ const SkillFreefallCanvas = ({ cardRect, images }: SkillFreefallCanvasProps) => 
           )
         : null
 
-      const cols = Math.min(SKILL_BALLS.length, width >= 900 ? 9 : width >= 560 ? 6 : 4)
+      const cols = Math.min(
+        SKILL_BALLS.length,
+        width >= 900 ? 9 : width >= 560 ? 6 : 4
+      )
       const bodies = SKILL_BALLS.map((_, index) => {
         const col = index % cols
         const row = Math.floor(index / cols)
-        const x = ((col + 0.5) / cols) * width + ((index % 3) - 1) * radius * 0.34
+        const x =
+          ((col + 0.5) / cols) * width + ((index % 3) - 1) * radius * 0.34
         const y = -radius * (2.5 + row * 1.25)
         const body = Bodies.circle(x, y, radius, {
           restitution: 0.38,
@@ -298,7 +320,9 @@ const SkillFreefallCanvas = ({ cardRect, images }: SkillFreefallCanvasProps) => 
 
       Composite.add(
         engine.world,
-        [floor, leftWall, rightWall, cardBody, ...bodies].filter((body) => body !== null)
+        [floor, leftWall, rightWall, cardBody, ...bodies].filter(
+          (body) => body !== null
+        )
       )
 
       Events.on(render, "afterRender", () => {
@@ -335,7 +359,13 @@ const SkillFreefallCanvas = ({ cardRect, images }: SkillFreefallCanvasProps) => 
     }
   }, [cardRect, images])
 
-  return <div ref={containerRef} className="pointer-events-none absolute inset-0" aria-hidden="true" />
+  return (
+    <div
+      ref={containerRef}
+      className="pointer-events-none absolute inset-0"
+      aria-hidden="true"
+    />
+  )
 }
 
 export const SkillSlashGame = () => {
@@ -343,7 +373,9 @@ export const SkillSlashGame = () => {
   const idleCardRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
   const imagesRef = useRef<(HTMLImageElement | null)[] | null>(null)
-  const [loadedImages, setLoadedImages] = useState<(HTMLImageElement | null)[]>([])
+  const [loadedImages, setLoadedImages] = useState<(HTMLImageElement | null)[]>(
+    []
+  )
   const [idleCardRect, setIdleCardRect] = useState<DOMRect | null>(null)
   const [isSectionVisible, setIsSectionVisible] = useState(false)
   const [isStarted, setIsStarted] = useState(false)
@@ -588,7 +620,9 @@ export const SkillSlashGame = () => {
     }
 
     const drawSlashTrail = (now: number) => {
-      const visiblePoints = slashPoints.filter((point) => now - point.time < SLASH_MEMORY_MS)
+      const visiblePoints = slashPoints.filter(
+        (point) => now - point.time < SLASH_MEMORY_MS
+      )
 
       if (visiblePoints.length < 2) return
 
@@ -606,14 +640,14 @@ export const SkillSlashGame = () => {
         ctx.lineTo(current.x, current.y)
         ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`
         ctx.lineWidth = 12 * alpha
-        ctx.shadowColor = "rgba(230, 74, 59, 0.75)"
+        ctx.shadowColor = "rgba(200, 255, 61, 0.75)"
         ctx.shadowBlur = 18
         ctx.stroke()
 
         ctx.beginPath()
         ctx.moveTo(previous.x, previous.y)
         ctx.lineTo(current.x, current.y)
-        ctx.strokeStyle = `rgba(230, 74, 59, ${alpha})`
+        ctx.strokeStyle = `rgba(200, 255, 61, ${alpha})`
         ctx.lineWidth = 4 * alpha
         ctx.stroke()
       }
@@ -626,7 +660,7 @@ export const SkillSlashGame = () => {
       const height = section.clientHeight
 
       ctx.clearRect(0, 0, width, height)
-      ctx.fillStyle = "#0e0e0e"
+      ctx.fillStyle = "#0a0a0b"
       ctx.fillRect(0, 0, width, height)
 
       const glow = ctx.createRadialGradient(
@@ -637,9 +671,9 @@ export const SkillSlashGame = () => {
         height * 1.08,
         width * 0.82
       )
-      glow.addColorStop(0, "rgba(230, 74, 59, 0.24)")
-      glow.addColorStop(0.42, "rgba(230, 74, 59, 0.08)")
-      glow.addColorStop(1, "rgba(230, 74, 59, 0)")
+      glow.addColorStop(0, "rgba(200, 255, 61, 0.24)")
+      glow.addColorStop(0.42, "rgba(200, 255, 61, 0.08)")
+      glow.addColorStop(1, "rgba(200, 255, 61, 0)")
 
       ctx.fillStyle = glow
       ctx.fillRect(0, 0, width, height)
@@ -684,7 +718,9 @@ export const SkillSlashGame = () => {
 
       const targetSpawnCount = Math.min(
         spawnQueue.length,
-        Math.floor(Math.max(0, elapsed - SPAWN_START_DELAY_MS) / SPAWN_INTERVAL_MS) + 1
+        Math.floor(
+          Math.max(0, elapsed - SPAWN_START_DELAY_MS) / SPAWN_INTERVAL_MS
+        ) + 1
       )
 
       while (spawnedCount < targetSpawnCount) {
@@ -742,14 +778,16 @@ export const SkillSlashGame = () => {
       drawBackground()
 
       balls.forEach((ball) => drawSkillBall(ctx, images[ball.skillIndex], ball))
-      pieces.forEach((piece) => drawSlicePiece(ctx, images[piece.skillIndex], piece))
+      pieces.forEach((piece) =>
+        drawSlicePiece(ctx, images[piece.skillIndex], piece)
+      )
 
       sparks.forEach((spark) => {
         const alpha = Math.max(0, spark.life / spark.maxLife)
 
         ctx.beginPath()
         ctx.arc(spark.x, spark.y, spark.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(230, 74, 59, ${alpha})`
+        ctx.fillStyle = `rgba(200, 255, 61, ${alpha})`
         ctx.fill()
       })
 
@@ -791,11 +829,11 @@ export const SkillSlashGame = () => {
   return (
     <section
       id="skill-slash-game"
-      className="w-full border-t border-neutral-800 bg-[#0e0e0e] text-white"
+      className="w-full border-t border-line bg-ink text-white"
     >
       <div
         ref={sectionRef}
-        className="relative isolate mx-auto h-[620px] max-w-6xl overflow-hidden border-x border-neutral-800 sm:h-[680px] lg:h-[760px]"
+        className="relative isolate mx-auto h-[620px] max-w-[1400px] overflow-hidden border-x border-line sm:h-[680px] lg:h-[760px]"
       >
         <canvas
           ref={canvasRef}
@@ -805,20 +843,19 @@ export const SkillSlashGame = () => {
 
         <ScrollReveal className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between gap-3 px-3 pt-4 sm:px-5 sm:pt-6">
           <div>
-            <span className="border border-[#e64a3b] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.35em] text-[#e64a3b]">
-              {"// Skill Slash"}
-            </span>
-            <h2 className="mt-3 max-w-[9ch] text-3xl leading-none font-black tracking-tighter text-white sm:max-w-[11ch] sm:text-5xl">
+            <SectionLabel>Skill Slash</SectionLabel>
+            <h2 className="mt-3 max-w-[9ch] text-4xl leading-none font-semibold tracking-[-0.045em] text-bone sm:max-w-[11ch] sm:text-6xl">
               Slice the stack.
             </h2>
           </div>
 
           <div className="shrink-0 border border-white/15 bg-black/45 px-2 py-1.5 text-right backdrop-blur sm:px-3 sm:py-2">
-            <p className="whitespace-nowrap text-[9px] font-bold uppercase tracking-[0.18em] text-neutral-500 sm:text-[10px] sm:tracking-[0.28em]">
+            <p className="text-[9px] font-bold tracking-[0.18em] whitespace-nowrap text-neutral-500 uppercase sm:text-[10px] sm:tracking-[0.28em]">
               Score / Time
             </p>
-            <p className="font-mono text-2xl leading-none font-black text-[#e64a3b] tabular-nums sm:text-3xl">
-              {String(score).padStart(2, "0")} / {String(timeLeft).padStart(2, "0")}
+            <p className="font-mono text-2xl leading-none font-black text-signal tabular-nums sm:text-3xl">
+              {String(score).padStart(2, "0")} /{" "}
+              {String(timeLeft).padStart(2, "0")}
             </p>
           </div>
         </ScrollReveal>
@@ -831,30 +868,34 @@ export const SkillSlashGame = () => {
               setTimeLeft(0)
               setIsStarted(false)
             }}
-            className="absolute right-5 bottom-7 z-20 border border-white/20 bg-black/55 px-4 py-3 text-[10px] font-black uppercase tracking-[0.28em] text-white backdrop-blur transition-colors active:border-[#e64a3b] active:bg-[#e64a3b]"
+            className="absolute right-5 bottom-7 z-20 border border-white/20 bg-black/55 px-4 py-3 text-[10px] font-black tracking-[0.28em] text-white uppercase backdrop-blur transition-colors active:border-signal active:bg-signal active:text-ink"
           >
             Stop Game
           </button>
         ) : null}
 
         {!isStarted ? (
-          <div className="absolute inset-0 z-20 flex items-end justify-center bg-linear-to-t from-[#0e0e0e] via-[#0e0e0e]/78 to-transparent px-5 pb-12">
+          <div className="absolute inset-0 z-20 flex items-end justify-center bg-linear-to-t from-[#0a0a0b] via-[#0a0a0b]/78 to-transparent px-5 pb-12">
             {isSectionVisible && idleCardRect ? (
-              <SkillFreefallCanvas cardRect={idleCardRect} images={loadedImages} />
+              <SkillFreefallCanvas
+                cardRect={idleCardRect}
+                images={loadedImages}
+              />
             ) : null}
 
             <ScrollReveal
               ref={idleCardRef}
-              className="relative z-10 w-full max-w-sm border border-neutral-800 bg-[#0e0e0e]/92 p-5 text-center shadow-2xl backdrop-blur"
+              className="relative z-10 w-full max-w-sm border border-neutral-800 bg-[#0a0a0b]/92 p-5 text-center shadow-2xl backdrop-blur"
             >
               {isRoundComplete ? (
-                <p className="mb-3 font-mono text-sm font-bold uppercase tracking-[0.28em] text-[#e64a3b]">
+                <p className="mb-3 font-mono text-sm font-bold tracking-[0.28em] text-signal uppercase">
                   Final score: {score}/{SKILL_BALLS.length}
                 </p>
               ) : null}
               <p className="text-sm leading-6 text-neutral-300">
-                This 15-second mini game shows my skills as flying skill balls. Each skill appears
-                once, so slash fast and score as many as you can.
+                This 15-second mini game shows my skills as flying skill balls.
+                Each skill appears once, so slash fast and score as many as you
+                can.
               </p>
               <button
                 type="button"
@@ -864,7 +905,7 @@ export const SkillSlashGame = () => {
                   setIsRoundComplete(false)
                   setIsStarted(true)
                 }}
-                className="mt-5 w-full border border-[#e64a3b] bg-[#e64a3b] px-5 py-3 text-xs font-black uppercase tracking-[0.32em] text-white transition-colors active:bg-white active:text-black"
+                className="mt-5 w-full border border-signal bg-signal px-5 py-3 text-xs font-black tracking-[0.32em] text-ink uppercase transition-colors active:bg-white active:text-black"
               >
                 {isRoundComplete ? "Play Again" : "Start Game"}
               </button>
@@ -872,7 +913,7 @@ export const SkillSlashGame = () => {
           </div>
         ) : null}
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-linear-to-t from-[#0e0e0e] to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-linear-to-t from-[#0a0a0b] to-transparent" />
       </div>
     </section>
   )

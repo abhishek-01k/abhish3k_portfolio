@@ -1,8 +1,11 @@
 import { notFound } from "next/navigation"
 
-import { Footer } from "@/src/modules/footer/footer"
+import { FooterSection } from "@/src/modules/footer/footer-section"
 import { ProjectDetail } from "@/src/modules/projects/components/project-detail"
-import { getProjectBySlug, getProjectSlug } from "@/src/modules/projects/project-utils"
+import {
+  getProjectBySlug,
+  getProjectSlug,
+} from "@/src/modules/projects/project-utils"
 import { PROJECTS } from "@/src/config/constants"
 
 interface ProjectDetailRouteProps {
@@ -22,12 +25,12 @@ export const generateMetadata = async ({ params }: ProjectDetailRouteProps) => {
 
   if (!project) {
     return {
-      title: "Project Not Found - Abhishek",
+      title: "Project not found",
     }
   }
 
   return {
-    title: `${project.title} - Abhishek`,
+    title: project.title,
     description: project.bullets[0],
   }
 }
@@ -41,9 +44,9 @@ export default async function ProjectDetailRoute({
   if (!project) notFound()
 
   return (
-    <main className="bg-[#0e0e0e]">
+    <main>
       <ProjectDetail project={project} />
-      <Footer />
+      <FooterSection />
     </main>
   )
 }
